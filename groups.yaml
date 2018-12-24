@@ -1,0 +1,103 @@
+# Grupos
+luz:
+  name: Luz
+  control: hidden
+  entities:
+    - switch.bar_lights
+    - switch.bar_lights_full
+    - switch.bar_lights_gas
+    - switch.bar_lights_step
+
+tv_samsung:
+  name: TV Samsung
+  control: hidden
+  entities:
+    - switch.tv_samsung
+    - switch.tv_samsung_input
+    - switch.tv_samsung_vol
+
+sony:
+  name: Minicomponente Sony
+  control: hidden
+  entities:
+    - switch.cd_sony
+    - switch.cd_sony_ff
+    - switch.cd_sony_folder
+    - switch.cd_sony_mute
+    - switch.cd_sony_next
+    - switch.cd_sony_play
+    - switch.cd_sony_re
+    - switch.cd_sony_tuner
+    - switch.cd_sony_usb
+    - switch.cd_sony_vol
+
+aa_samsung:
+  name: Aire acondicionado
+  control: hidden
+  entities:
+    - switch.aa_samsung_frio_26_silencioso
+    - switch.aa_samsung_frio_25_fast_nobeep
+    - switch.aa_samsung_frio_25_silencioso
+    - switch.aa_samsung_frio_24_fast
+    - switch.aa_samsung_frio_24_normal
+    - switch.aa_samsung_frio_24_vaiven
+
+tv_philips:
+  name: TV Philips
+  control: hidden
+  entities:
+    - switch.tv_phillips
+
+estufa:
+  name: Estufa
+  control: hidden
+  entities:
+    - switch.estufa
+    - automation.apagar_la_estufa
+    - automation.encender_la_estufa
+    - input_number.max_temp
+    - input_number.min_temp
+    - input_number.off_temp
+
+modem:
+  name: Cisco DPC3828
+  control: hidden
+  entities:
+    - sensor.cisco_dpc3828_bytes_received
+    - sensor.cisco_dpc3828_bytes_sent
+    - sensor.cisco_dpc3828_kbytesec_received
+    - sensor.cisco_dpc3828_kbytesec_sent
+    - sensor.cisco_dpc3828_packets_received
+    - sensor.cisco_dpc3828_packets_sent
+    - sensor.cisco_dpc3828_packetssec_received
+    - sensor.cisco_dpc3828_packetssec_sent 
+
+# Vistas
+
+living:
+  name: Living
+  view: yes
+  entities:
+    - group.luz
+    - sensor.clima_temperature
+    - sensor.living_temperature
+    - climate.living
+    - media_player.samsung_tv
+
+dormitorio:
+  name: Dormitorio
+  view: yes
+  entities:
+    - media_player.minicomponente_sony
+    - group.aa_samsung
+    - climate.samsung
+
+cuarto:
+  name: Cuarto
+  view: yes
+  entities:
+    - sensor.clima_temperature
+    - sensor.cuarto_temperature
+    - media_player.philips_tv
+
+

@@ -1,0 +1,434 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Departamento
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret latitude
+  longitude: !secret longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: !secret elevation
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: !secret time_zone
+  # Customization file
+  customize: !include customize.yaml
+  auth_providers:
+    - type: homeassistant
+    - type: trusted_networks
+
+# Show links to resources in log and frontend
+# introduction:
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+http:
+  # Secrets are defined in the file secrets.yaml
+  # api_password: !secret http_password
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  base_url: !secret base_url
+  ssl_certificate: !secret ssl_certificate
+  ssl_key: !secret ssl_key
+  trusted_networks:
+    - 127.0.0.1
+    - ::1
+    - !secret trusted_network
+
+upnp:
+  port_mapping: true
+  sensors: true
+  ports:
+    8123: hass
+    8009: 9
+    8122: 22
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+  ignore:
+    - samsung_tv
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+sun:
+
+# Weather prediction
+# Weather YWeather
+weather:
+  - platform: yweather
+    name: "Clima"
+    woeid: !secret woeid
+sensor:
+  - platform: template
+    scan_interval: 3600
+    sensors:
+      clima_temperature:
+        friendly_name: "Exterior"
+        value_template: '{{ states.weather.clima.attributes.temperature }}'
+        device_class: temperature
+        unit_of_measurement: '°C'
+      clima_humidity:
+        friendly_name: "Humedad exterior"
+        value_template: '{{ states.weather.clima.attributes.humidity }}'
+        device_class: humidity
+        unit_of_measurement: '%'
+      clima_pressure:
+        friendly_name: "Presión atmosférica"
+        value_template: '{{ states.weather.clima.attributes.pressure }}'
+        unit_of_measurement: hPa
+
+  - platform: moon
+
+  - platform: broadlink
+    update_interval: 60
+    name: "Living"
+    host: !secret RM1_ip
+    mac: !secret RM1_mac
+    monitored_conditions:
+      - 'temperature'
+
+  - platform: broadlink
+    update_interval: 60
+    name: "Cuarto"
+    host: !secret RM2_ip
+    mac: !secret RM2_mac
+    monitored_conditions:
+      - 'temperature'
+
+  - platform: season
+    type: astronomical
+
+#  - platform: linux_battery
+#    name: "Mouse"
+#    battery: 1
+#
+#  - platform: linux_battery
+#    name: "Teclado"
+#    battery: 2
+
+# Text to speech
+tts:
+  - platform: google
+    language: 'es'
+#  - platform: picotts
+#    language: 'es-ES'
+
+# Cloud
+cloud:
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+
+switch:
+  - platform: broadlink
+    host: !secret RM1_ip
+    mac: !secret RM1_mac
+    timeout: 15
+    friendly_name: 'RM Pro Living'
+    switches:
+      wakeup_the_broadlink:
+        #Fire 0x00 as a dummy code. This will wake up the broadlink device if it hasn't been used in a six-ish or so hours.  Otherwise codes do not seem to fire properly when waking up the house???
+        friendly_name: "Despertar Broadlink Living"
+        command_on: '================'
+        command_off: '================'
+      bar_lights:
+        friendly_name: "Luz del techo"
+        command_off: 'sgM0AA4iDiMoCw4AAWYnCygLDiMOIicMKAwOIigLDiIOIg4iDiIoDCgMKAwOIg4jKAsOIg4iDiMAAAAA'
+        command_on: 'sgM0AA4iDiMoCw4AAWYnCygLDiMOIicMKAwOIigLDiIOIg4iDiIoDCgMKAwOIg4jKAsOIg4iDiMAAAAA'
+      bar_lights_step:
+        friendly_name: "Brillo en 43 pasos"
+        command_off: 'sgE0AA0iIwsjCyMLDSINIiMLDSINIg0iDSIkCw0iDQABXiQLIwsNIg0iIwskCw0iJAsNIg0iDCIAAAAA'
+        command_on: 'sgE0AA0iDSIjCyQLIwsNIg0iJAsNIg0iDSIjDAwiDSINAAFfIwsjCw0iDSIkCyMLDSIjCw0iDSIAAAAA'
+      bar_lights_gas:
+        friendly_name: "Brillo en 5 pasos"
+        command_off: 'shs0AA0iIwsjCyMLDSINIiMLDSINIg0iDSIkCw0iDQABXiQLIwsNIg0iIwskCw0iJAsNIg0iDCIAAAAA'
+        command_on: 'shs0AA0iDSIjCyQLIwsNIg0iJAsNIg0iDSIjDAwiDSINAAFfIwsjCw0iDSIkCyMLDSIjCw0iDSIAAAAA'
+      bar_lights_full:
+        friendly_name: "Brillo a lo que da"
+        command_off: 'soc0AA0iIwsjCyMLDSINIiMLDSINIg0iDSIkCw0iDQABXiQLIwsNIg0iIwskCw0iJAsNIg0iDCIAAAAA'
+        command_on: 'soc0AA0iDSIjCyQLIwsNIg0iJAsNIg0iDSIjDAwiDSINAAFfIwsjCw0iDSIkCyMLDSIjCw0iDSIAAAAA'
+      tv_samsung:
+        friendly_name: "Samsung TV"
+        command_off: 'JgBGAJOVEDoQOhA6DxYPFhAVEBUQFRA6ETkROREUERQRFBEUEBUQFREUERQRORE5EBUQFRE5ETkRORE5ERUQFRA6DzsPFhAADQUAAA=='
+        command_on:  'JgBGAJKVETkRORA6ERQRFBEUERQRFBE5ETkQOhAVEBUQFREUEBUQOhEUERQRORE5EBURFBA6EBUQOhE5EBUQFRA6EDoRFBEADQUAAA=='
+#        command_off: 'JgBGAJSTEjgSOBI4EhMSExITEhMSExI4EjgSOBITEhMSExITEhMSExITEhMSOBI4EhMSExI4EjgSOBI4EhMSExI4EjgSExIABaQNBQ=='
+      tv_samsung_vol:
+        friendly_name: "Samsung TV volumen"
+        command_off: 'JgBGAJKVEDoSOBE5EBUQFREUERQRFBA6EDoROREUEBURFBEUEBUQOhE5ERQROREUEBURFBAVEBUQFRE5ERQQOhE5EDoQOhAADQUAAA=='
+        command_on:  'JgBGAJKVETkRORA6ERQRFBAVEBUQFRA7EDkROhAUERUQFRAUEBYQOhA6EDoPFhAVEBUQFQ8WEBUPFhAVEDoQOhA6EDoQOg8ADQUAAA=='
+      tv_samsung_input:
+        friendly_name: "Samsung HDMI3/TV"
+        command_off: 'JgBGAJOUEDoRORE5ERQRFRAUERQRFBE5EDsQOhAVEBUPFg8WDxYPFhA6EBUPFg8WEBUROQ87EDoQFQ87EDoQOhA6EBUPFhAADQUAAA=='
+        command_on:  'JgBGAJSUEjcSNxI3EhISEhISEhISEhI3EjcSNxISEhISEhISEhISNxI3EhISNxI3EhISEhISEhISEhI3EhISEhI3EjcSNxIABaQNBQ=='
+
+
+  - platform: broadlink
+    host: !secret IR3_ip
+    mac: !secret IR3_mac
+    timeout: 15
+    friendly_name: 'Black Bean'
+    switches:
+      cd_sony:
+        friendly_name: "Encendido"
+        command_on: 'JgIcAEkSEhIlEiUSJRISEiUSEhISEhISEhISEiUAAv8NBQAAAAAAAAAAAAA='
+        command_off: 'JgIcAEkSJRIlEiUSJRISEiUSEhISEhISEhISEiUAAu0NBQAAAAAAAAAAAAA='
+      cd_sony_play:
+        friendly_name: " ▶ / ▮▮"
+        command_on: 'JgIsAEkSEhIlEhISEhIlEiUSEhISEiUSEhIlEiUSJRISEhISJRIlEiUSEhISAAGADQUAAAAAAAAAAAAA'
+        command_off: 'JgIsAEkSJRISEhISJRIlEiUSEhISEiUSEhIlEiUSJRISEhISJRIlEiUSEhISAAFtDQUAAAAAAAAAAAAA'
+      cd_sony_vol:
+        friendly_name: "+ Vol -"
+        command_on: 'JgIcAEkSEhIlEhISEhIlEhISEhISEhISEhISEiUAAyQNBQAAAAAAAAAAAAA='
+        command_off: 'JgIcAEkSJRIlEhISEhIlEhISEhISEhISEhISEiUAAxINBQAAAAAAAAAAAAA='
+      cd_sony_ff:
+        friendly_name: "⏩ / ⏪"
+        command_on: 'JgIsAEkSEhISEiUSEhIlEiUSEhISEiUSEhIlEiUSJRISEhISJRIlEiUSEhISAAGADQUAAAAAAAAAAAAA'
+        command_off: 'JgIsAEkSJRIlEhISEhIlEiUSEhISEiUSEhIlEiUSJRISEhISJRIlEiUSEhISAAFtDQUAAAAAAAAAAAAA'
+      cd_sony_next:
+        friendly_name: "⏭ / ⏮"
+        command_on: 'JgIsAEkSJRISEhISEhIlEiUSEhISEiUSEhIlEiUSJRISEhISJRIlEiUSEhISAAGADQUAAAAAAAAAAAAA'
+        command_off: 'JgIsAEkSEhISEhISEhIlEiUSEhISEiUSEhIlEiUSJRISEhISJRIlEiUSEhISAAGSDQUAAAAAAAAAAAAA'
+      cd_sony_folder:
+        friendly_name: "+ carpeta -"
+        command_on: 'JgIsAEkSJRIlEiUSJRISEiUSEhISEiUSEhIlEiUSJRISEhISJRIlEiUSEhISAAFbDQUAAAAAAAAAAAAA'
+        command_off: 'JgIsAEkSEhIlEiUSJRISEiUSEhISEiUSEhIlEiUSJRISEhISJRIlEiUSEhISAAFtDQUAAAAAAAAAAAAA'
+      cd_sony_tuner:
+        friendly_name: "CD  / ⏹"
+        command_on: 'JgIcAEkSJRISEiUSEhISEiUSEhISEhISEhISEiUAAxINBQAAAAAAAAAAAAA='
+        command_off: 'JgIsAEkSEhISEhISJRIlEiUSEhISEiUSEhIlEiUSJRISEhISJRIlEiUSEhISAAGADQUAAAAAAAAAAAAA'
+      cd_sony_usb:
+        friendly_name: "USB / Radio "
+        command_on: 'JgIiAEkSEhIlEhISJRIlEhISEhISEhISEhISEiUSEhISEiUAApINBQAAAAA='
+        command_off: 'JgIcAEkSJRIlEiUSJRISEhISEhISEhISEhISEiUAAv8NBQAAAAAAAAAAAAA='
+      cd_sony_re:
+        friendly_name: "Repetir/FM Mode - off no se"
+        command_on: 'JgIsAEkSJRISEiUSJRISEiUSEhISEiUSEhIlEiUSJRISEhISJRIlEiUSEhISAAFtDQUAAAAAAAAAAAAA'
+        command_off: 'JgIiAEkSJRIlEhISEhISEiUSJRISEhISEhISEiUSEhISEiUAAn8NBQAAAAA='
+      cd_sony_mute:
+        friendly_name: "Clear / Mute"
+        command_on: 'JgIsAEkSJRIlEiUSJRISEhISEhISEiUSEhIlEiUSJRISEhISJRIlEiUSEhISAAFtDQUAAAAAAAAAAAAA'
+        command_off: 'JgIcAEkSEhISEiUSEhIlEhISEhISEhISEhISEiUAAyQNBQAAAAAAAAAAAAA='
+      aa_samsung_frio_26_silencioso:
+        friendly_name: "Silencioso 26°C"
+        command_on: 'JgDyABQAAjlkAAEkEg8RMBIPEQ8SDxEQEQ8SDxIPEi8SDxEQEQ8REBEQETASLxIvEjASLxIOEw4SDxIOEhARDxIPERAQEBEQEQ8SDxEQEQ8SDxEQEQ8SDxEPEw4SDxIOEhARDxIPETAREBEPEg8REBEPEg8RMBIvEy8SLxJgYwABJRIwERARDxEQERARDxEQEQ8SDxEwEg8REBIvEi8SMBEwERARMBIvEy8SDhIvEw4RMBMvEg4SEBEPEjARMBEwEg8RDxIPEQ8SDxEQETASDxIvEi8SEBEPERARMBEQEQ8SDxEQEQ8REBEPEjASLxIvEjARAA0FAAAAAAAA'
+        command_off: 'JgBoARMAAkljAAElERARMBEQEQ8SDxEPEg8REBEPEjAREBARDjMQMREQETARMBIvEjARMBEPEg8REBEPEhAQEA4TEBERDxEQERARDxEQEQ8SDxEQEQ8REBEPEg8REBEQERAQEBEQEBASDxEQEQ8SDxEQEQ8SDxEPEjARMA9jYAABKBIwEBEQEA4TEBAREBEQEQ8SDxEwERARDxIvEg8RMREwETEQMQ4zETASDxEQEQ8RDhMPEg8REBEPEg8REBEQEBEOEhEQDhIQERAREQwVDxEPEg8REBEPEg8REBEPERARDxIQEBAOEw4TDhIQEREPEg8RYmIAASURMBIPERARDxEQEQ8SDxEQERAOMxEQDhIQMhEPEg8REBEwETARMBIvEg8RMREQDjMOMxAREQ4TDxEwEi8SMBEPEg8REBEPEREQERAxDhIOMxAyEQ8SDxEPEjARDxIPERARDxEQEQ8SEBARDRMRMA4zEgANBQ=='
+      aa_samsung_frio_25_fast_nobeep:
+        friendly_name: "Fast beep off 25°C"
+        command_on: 'JgDyABUAAjhkAAElEQ4TMBEPEg0TEBEPEg8RDxIPETASEBAQEDIOEhEQDjMPMhExEDEQMRARDxEPEg8SDxEPEw4SDxIOExAQDhMPERARDxIPEQ8SDxIPEQ8SDxIPEQ8SDxEPEw4SEBEOExEPERAPEg8RDxIPMg8yDzMPMg9jYQABJw8zDhMOEg8SDhMQEBEQEQ8QEQ8yERAREA8yETARMBEREBARMQ4zETARMBExETARMBEwETERMRAQETEOMw4zERARDxEQERARDxExEBAREBEwETARMQ8zDjMRMBEQEQ8REBEQEQ8RMRAQETARMRExETARAA0FAAAAAAAA'
+        command_off: 'JgBoARMAAkljAAElERARMBEQEQ8SDxEPEg8REBEPEjAREBARDjMQMREQETARMBIvEjARMBEPEg8REBEPEhAQEA4TEBERDxEQERARDxEQEQ8SDxEQEQ8REBEPEg8REBEQERAQEBEQEBASDxEQEQ8SDxEQEQ8SDxEPEjARMA9jYAABKBIwEBEQEA4TEBAREBEQEQ8SDxEwERARDxIvEg8RMREwETEQMQ4zETASDxEQEQ8RDhMPEg8REBEPEg8REBEQEBEOEhEQDhIQERAREQwVDxEPEg8REBEPEg8REBEPERARDxIQEBAOEw4TDhIQEREPEg8RYmIAASURMBIPERARDxEQEQ8SDxEQERAOMxEQDhIQMhEPEg8REBEwETARMBIvEg8RMREQDjMOMxAREQ4TDxEwEi8SMBEPEg8REBEPEREQERAxDhIOMxAyEQ8SDxEPEjARDxIPERARDxEQEQ8SEBARDRMRMA4zEgANBQ=='
+      aa_samsung_frio_25_silencioso:
+        friendly_name: "Quiet 25°C"
+        command_on: 'JgDyABIAAk5gAAEnEhAQMQ4SERAREBEPEg8REBEPEi8SDxEQEQ8SDxEQETEQMQ4zETARMBIPERARDxIPEQ8SDxIPEQ8SDxEQERAREBAQDhMRDxEQERARDxIPERARDxIPEQ8SDxEQETARDxIQEBEQEBEQEQ8RMREwETARMBJhYgABJRIvEg8REBEQERAQEBEQDhISDxEwEg8REBEwETARMBIwEQ8SLxIwETEOEhExEQ8RMBIwEQ8SDxEPEjARMBEwERAREBEQEQ8REBEwERARDxIwETAREBEPEg8RMBEREBAREBAQDhMREBAQETASMBEwETASAA0FAAAAAAAA'
+        command_off: 'JgBoARMAAkljAAElERARMBEQEQ8SDxEPEg8REBEPEjAREBARDjMQMREQETARMBIvEjARMBEPEg8REBEPEhAQEA4TEBERDxEQERARDxEQEQ8SDxEQEQ8REBEPEg8REBEQERAQEBEQEBASDxEQEQ8SDxEQEQ8SDxEPEjARMA9jYAABKBIwEBEQEA4TEBAREBEQEQ8SDxEwERARDxIvEg8RMREwETEQMQ4zETASDxEQEQ8RDhMPEg8REBEPEg8REBEQEBEOEhEQDhIQERAREQwVDxEPEg8REBEPEg8REBEPERARDxIQEBAOEw4TDhIQEREPEg8RYmIAASURMBIPERARDxEQEQ8SDxEQERAOMxEQDhIQMhEPEg8REBEwETARMBIvEg8RMREQDjMOMxAREQ4TDxEwEi8SMBEPEg8REBEPEREQERAxDhIOMxAyEQ8SDxEPEjARDxIPERARDxEQEQ8SEBARDRMRMA4zEgANBQ=='
+      aa_samsung_frio_24_fast:
+        friendly_name: "Fast 24°C"
+        command_on: 'JgDyABUAAjhjAAElERARMBEQEQ8SDxEPEg8REBEPEjAREBAREDERDxEQETASLxIwETARMBEQEQ8SEBAQERAQEQ8REBERDxEQERARDxIPEQ8SDxEQEQ8SDxEPEg8REBEQERAQEA4TERARDxEQEQ8SDxEQEQ8SLxIwETARMBJhYgABJRExDhMRDxEQEQ8SDxEQEQ8SDxEwEg8RDxIwEQ8SEBAxEBAPMxEwETASLxIvEjARMBEwEi8SMBEQDjMRMBIwEQ8SDxEPEg8SDxEPEg8REBEwETEQMQ4zETASMBEPEg8REBEPEg8RDxIPETASLxIwETERAA0FAAAAAAAA'
+        command_off: 'JgBoARMAAkljAAElERARMBEQEQ8SDxEPEg8REBEPEjAREBARDjMQMREQETARMBIvEjARMBEPEg8REBEPEhAQEA4TEBERDxEQERARDxEQEQ8SDxEQEQ8REBEPEg8REBEQERAQEBEQEBASDxEQEQ8SDxEQEQ8SDxEPEjARMA9jYAABKBIwEBEQEA4TEBAREBEQEQ8SDxEwERARDxIvEg8RMREwETEQMQ4zETASDxEQEQ8RDhMPEg8REBEPEg8REBEQEBEOEhEQDhIQERAREQwVDxEPEg8REBEPEg8REBEPERARDxIQEBAOEw4TDhIQEREPEg8RYmIAASURMBIPERARDxEQEQ8SDxEQERAOMxEQDhIQMhEPEg8REBEwETARMBIvEg8RMREQDjMOMxAREQ4TDxEwEi8SMBEPEg8REBEPEREQERAxDhIOMxAyEQ8SDxEPEjARDxIPERARDxEQEQ8SEBARDRMRMA4zEgANBQ=='
+      aa_samsung_frio_24_normal:
+        friendly_name: "Normal 24°C"
+        command_on: 'JgDyABMAAktjAAEmDhIPMhEQEBEQEBAREBAREBAREDEQEQ8RDzMOEw4SDzMPMg8yDzIPMhARDxIPEQ8SDxIPEQ8TDhIQEQ4SERAOEw8RDxIPERARDxIPEQ8SDxIPEQ8SDxEPEg8SDxIQEQ4SERARDw8SDxIPMg8yDzIPMxBiYAABJw8zDxIOEw4SDhMRDw8SDxIPEQ8yEBEPEg8RDzMPMg8yDxMOMw4zETAPMg8zDzIPMg8yDxIPERARDzMOMw8yERAPEg8RDxIPEg8RDxIPEQ8zDzIPEg8RDxIPMw4SDxIREBAQDxIPERARDzIPMhAyDzIPAA0FAAAAAAAA'
+        command_off: 'JgBoARMAAkljAAElERARMBEQEQ8SDxEPEg8REBEPEjAREBARDjMQMREQETARMBIvEjARMBEPEg8REBEPEhAQEA4TEBERDxEQERARDxEQEQ8SDxEQEQ8REBEPEg8REBEQERAQEBEQEBASDxEQEQ8SDxEQEQ8SDxEPEjARMA9jYAABKBIwEBEQEA4TEBAREBEQEQ8SDxEwERARDxIvEg8RMREwETEQMQ4zETASDxEQEQ8RDhMPEg8REBEPEg8REBEQEBEOEhEQDhIQERAREQwVDxEPEg8REBEPEg8REBEPERARDxIQEBAOEw4TDhIQEREPEg8RYmIAASURMBIPERARDxEQEQ8SDxEQERAOMxEQDhIQMhEPEg8REBEwETARMBIvEg8RMREQDjMOMxAREQ4TDxEwEi8SMBEPEg8REBEPEREQERAxDhIOMxAyEQ8SDxEPEjARDxIPERARDxEQEQ8SEBARDRMRMA4zEgANBQ=='
+      aa_samsung_frio_24_vaiven:
+        friendly_name: "Vaiven 24°C"
+        command_on: 'JgDyABMAAkhkAAEkEg8RMBEQEBAPEg8REBEPEg8RDzIQEQ8TDjMOEg8SETAPMhAyDzIPMg8SDxEPEg8SDxEPEw4SDhMOEg8SERAPEQ8SDxEQEQ8SDxEPEg8REBEPEg8RDxMOEg8SDhMOEg4TEQ8REA8SDxEPMhAyDzIPMg9kYAABJw8zDhMOEg4TDhIREA8SDxEPEg8yDxIPEQ8SDxIPEg4SDzMOMw4zETEQEA8yDxIPMg8yDxIPEg8RDzIQMg8zDhIPEhEQEBAPEg8RDxIPEg8yDzIPEg8RDxMOMw4TDxEOExEPERAPEg8RDzIQMg8yDzIPAA0FAAAAAAAA'
+        command_off: 'JgBoARMAAkljAAElERARMBEQEQ8SDxEPEg8REBEPEjAREBARDjMQMREQETARMBIvEjARMBEPEg8REBEPEhAQEA4TEBERDxEQERARDxEQEQ8SDxEQEQ8REBEPEg8REBEQERAQEBEQEBASDxEQEQ8SDxEQEQ8SDxEPEjARMA9jYAABKBIwEBEQEA4TEBAREBEQEQ8SDxEwERARDxIvEg8RMREwETEQMQ4zETASDxEQEQ8RDhMPEg8REBEPEg8REBEQEBEOEhEQDhIQERAREQwVDxEPEg8REBEPEg8REBEPERARDxIQEBAOEw4TDhIQEREPEg8RYmIAASURMBIPERARDxEQEQ8SDxEQERAOMxEQDhIQMhEPEg8REBEwETARMBIvEg8RMREQDjMOMxAREQ4TDxEwEi8SMBEPEg8REBEPEREQERAxDhIOMxAyEQ8SDxEPEjARDxIPERARDxEQEQ8SEBARDRMRMA4zEgANBQ=='
+
+  - platform: broadlink
+    host: !secret SP3_ip
+    mac: !secret SP3_mac
+    timeout: 15
+    type:  sp3
+    friendly_name: 'Estufa'
+  - platform: broadlink
+    host: !secret RM2_ip
+    mac: !secret RM2_mac
+    friendly_name: 'RM Pro Cuarto'
+    switches:
+      tv_phillips:
+        friendly_name: "Phillips TV"
+        command_on: 'JgAsAFcdDxwQDg4PDh4dDw4PDg8PDg8PDg8ODw8ODw8ODw4PEA4dDg8dDg8PAA0FAAAAAAAAAAAAAAAA'
+        command_off: 'JgAsAFcdDxwQDg4PDh4dDw4PDg8PDg8PDg8ODw8ODw8ODw4PEA4dDg8dDg8PAA0FAAAAAAAAAAAAAAAA'
+      wakeup_the_broadlink2:
+        #Fire 0x00 as a dummy code. This will wake up the broadlink device if it hasn't been used in a six-ish or so hours.  Otherwise codes do not seem to fire properly when waking up the house???
+        friendly_name: "Despertar Broadlink Cuarto"
+        command_on: '================'
+        command_off: '================'
+
+climate:
+  - platform: generic_thermostat
+    name: Living
+    heater: switch.estufa
+    target_sensor: sensor.living_temperature
+    min_temp: 16
+    max_temp: 24
+    target_temp: 22
+    away_temp: 20
+    cold_tolerance: 0.3
+    hot_tolerance: 0.3
+    precision: 0.1
+    initial_operation_mode: "off"
+    ac_mode: False
+    min_cycle_duration:
+      minutes: 20
+
+  - platform: broadlink
+    host: !secret IR3_ip
+    mac: !secret IR3_mac
+    timeout: 15
+    name: Samsung
+    ircodes_ini: 'broadlink_climate_codes/samsung.ini'
+    min_temp: 16
+    max_temp: 30
+    target_temp: 24
+    target_temp_step: 1
+    temp_sensor: sensor.cuarto_temperature
+    default_operation: 'off'
+    default_fan_mode: med
+    customize:
+      operations:
+        - 'off'
+        - cool
+        - heat
+        - auto
+        - dry
+        - fan
+      fan_modes:
+        - low
+        - med
+        - high
+        - auto
+
+media_player:
+#  - platform: gstreamer
+  - platform: broadlink
+    name: Samsung TV
+    host: !secret RM1_ip
+    mac: !secret RM1_mac
+    timeout: 15
+    ircodes_ini: 'broadlink_media_codes/samsung.ini'
+    ping_host: !secret TV_samsung_ip
+
+  - platform: broadlink
+    name: Philips TV
+    host: !secret RM2_ip
+    mac: !secret RM2_mac
+    timeout: 15
+    ircodes_ini: 'broadlink_media_codes/philips.ini'
+
+  - platform: broadlink
+    name: Minicomponente Sony
+    host: !secret IR3_ip
+    mac: !secret IR3_mac
+    timeout: 15
+    ircodes_ini: 'broadlink_media_codes/sony.ini'
+
+#  - platform: universal
+#    name: Living TV mezcla
+#    children:
+#      - media_player.living_tv
+#    attributes:
+#      source: media_player.living_tv|source
+#      source_list: media_player.living_tv|source_list
+#      state: media_player.samsung48_un48ju6700
+#    commands:
+#      turn_on:
+#        service: media_player.turn_on
+#        data:
+#          entity_id: media_player.living_tv
+#      turn_off:
+#        service: media_player.turn_off
+#        data:
+#          entity_id: media_player.living_tv
+#      select_source:
+#        service: media_player.select_source
+#        data_template:
+#          entity_id: media_player.living_tv
+#          source: '{{ source }}'
+
+input_number:
+  max_temp:
+    name: Temperatura máxima
+    min: 20
+    max: 23
+    step: 0.1
+    unit_of_measurement: °C
+    icon: mdi:target
+  min_temp:
+    name: Temperatura mínima
+    min: 19
+    max: 22.9
+    step: 0.1
+    unit_of_measurement: °C
+    icon: mdi:target
+  off_temp:
+    name: Temperatura apagado
+    min: 15
+    max: 22
+    step: 0.1
+    unit_of_measurement: °C
+    icon: mdi:snowflake
+# keyboard:
+keyboard_remote:
+  device_name: 'Bluetooth Keyboard'
+  type: 'key_down'
+
+google_assistant:
+  project_id: !secret project_id
+  api_key: !secret api_key
+  exposed_domains:
+    - switch
+  entity_config:
+     switch.bar_lights:
+       name: Luz del techo
+       aliases:
+         - Luz del living
+         - La luz
+     switch.wakeup_the_broadlink:
+       expose: false
+     switch.wakeup_the_broadlink2:
+       expose: false
+
+
+shopping_list:
+
+light:
+  - platform: template
+    lights:
+      luz_techo:
+        friendly_name: "Luz del techo"
+        turn_on:
+          service: !secret RM1_service
+          data:
+            packet: "sgM0AA4iDiMoCw4AAWYnCygLDiMOIicMKAwOIigLDiIOIg4iDiIoDCgMKAwOIg4jKAsOIg4iDiMAAAAA"
+        turn_off:
+          service: !secret RM1_service
+          data:
+            packet: "sgM0AA4iDiMoCw4AAWYnCygLDiMOIicMKAwOIigLDiIOIg4iDiIoDCgMKAwOIg4jKAsOIg4iDiMAAAAA"
+        set_level:
+          service: !secret RM1_service
+          data_template:
+            packet: '{{ "shs0AA0iDSIjCyQLIwsNIg0iJAsNIg0iDSIjDAwiDSINAAFfIwsjCw0iDSIkCyMLDSIjCw0iDSIAAAAA" if state_attr("light.luz_techo", "brightness")|int < brightness|int else "shs0AA0iIwsjCyMLDSINIiMLDSINIg0iDSIkCw0iDQABXiQLIwsNIg0iIwskCw0iJAsNIg0iDCIAAAAA" }}'
+
+

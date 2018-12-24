@@ -1,0 +1,77 @@
+sensor.living_temperature:
+  device_class: temperature
+  friendly_name: Living
+switch.tv_samsung:
+  friendly_name: Off / On
+  icon: mdi:television
+switch.bar_lights:
+  icon: mdi:lightbulb
+switch.estufa:
+  icon: mdi:square
+switch.tv_phillips:
+  icon: mdi:television
+switch.wakeup_the_broadlink:
+  icon: mdi:sleep-off
+automation.encender_estufa_a_215oc:
+  icon: mdi:thermometer-lines
+automation.apagar_estufa_a_22oc:
+  icon: mdi:thermometer-lines
+switch.wakeup_the_broadlink2:
+  icon: mdi:sleep-off
+switch.tv_samsung_input:
+  friendly_name: TV / HDMI3
+  icon: mdi:video-input-hdmi
+switch.tv_samsung_vol:
+  friendly_name: '- / +'
+  icon: mdi:volume-low
+sensor.moon:
+  friendly_name: Luna
+sun.sun:
+  friendly_name: Sol
+switch.cd_sony_vol:
+  friendly_name: "+ \U0001F50A -"
+  icon: mdi:volume-high
+switch.cd_sony_play:
+  friendly_name: ▶ / ▮▮
+  icon: mdi:play-pause
+switch.cd_sony_usb:
+  assumed_state: true
+  icon: mdi:usb
+switch.cd_sony_folder:
+  friendly_name: "+ \U0001F4C1 -"
+  icon: mdi:folder
+switch.cd_sony:
+  friendly_name: On / Off
+  icon: mdi:power
+switch.cd_sony_ff:
+  friendly_name: ⏩ / ⏪
+  icon: mdi:fast-forward
+switch.cd_sony_next:
+  friendly_name: ⏭ / ⏮
+  icon: mdi:skip-next
+switch.cd_sony_tuner:
+  friendly_name: "\U0001F4BF  / ⏹"
+  icon: mdi:disk
+switch.cd_sony_re:
+  friendly_name: "\U0001F501 / FM Mode - off no se"
+  icon: mdi:repeat
+switch.cd_sony_mute:
+  friendly_name: "Clear / \U0001F507"
+  icon: mdi:volume-mute
+switch.bar_lights_full:
+  friendly_name: Brillo a lo que da
+  icon: mdi:lightbulb-on
+switch.bar_lights_gas:
+  friendly_name: Brillo en 5 pasos
+  icon: mdi:lightbulb-on-outline
+switch.bar_lights_step:
+  friendly_name: Brillo en 43 pasos
+  icon: mdi:lightbulb-outline
+group.sony:
+  friendly_name: Minicomponente Sony
+  icon: mdi:boombox
+sensor.cuarto_temperature:
+  device_class: temperature
+  friendly_name: Cuarto
+media_player.living_tv: {}
+media_player.samsung48_un48ju6700: {}

@@ -1,0 +1,37 @@
+- id: '1533406679774'
+  alias: Apagar la estufa
+  trigger:
+  - platform: template
+    value_template: '{{ (states("sensor.living_temperature") | float * 10 | int )
+      >= (states("input_number.max_temp") | float * 10 | int ) }}'
+  condition:
+  - condition: state
+    entity_id: switch.estufa
+    state: 'on'
+  - condition: template
+    value_template: '{{ (states("sensor.living_temperature") | float * 10 | int )
+      >= (states("input_number.max_temp") | float * 10 | int ) }}'
+  action:
+  - data:
+      entity_id: switch.estufa
+    service: switch.turn_off
+- id: '1533406808288'
+  alias: Encender la estufa
+  trigger:
+  - entity_id: input_number.min_temp
+    platform: state
+  - entity_id: sensor.living_temperature
+    platform: state
+  - event: start
+    platform: homeassistant
+  condition:
+  - condition: state
+    entity_id: switch.estufa
+    state: 'off'
+  - condition: template
+    value_template: '{{ (states("sensor.living_temperature") | float * 10 | int )
+      <= (states("input_number.min_temp") | float * 10 | int ) }}'
+  action:
+  - data:
+      entity_id: switch.estufa
+    service: switch.turn_on
