@@ -344,51 +344,6 @@ media_player:
     timeout: 15
     ircodes_ini: 'broadlink_media_codes/sony.ini'
 
-#  - platform: universal
-#    name: Living TV mezcla
-#    children:
-#      - media_player.living_tv
-#    attributes:
-#      source: media_player.living_tv|source
-#      source_list: media_player.living_tv|source_list
-#      state: media_player.samsung48_un48ju6700
-#    commands:
-#      turn_on:
-#        service: media_player.turn_on
-#        data:
-#          entity_id: media_player.living_tv
-#      turn_off:
-#        service: media_player.turn_off
-#        data:
-#          entity_id: media_player.living_tv
-#      select_source:
-#        service: media_player.select_source
-#        data_template:
-#          entity_id: media_player.living_tv
-#          source: '{{ source }}'
-
-input_number:
-  max_temp:
-    name: Temperatura máxima
-    min: 20
-    max: 23
-    step: 0.1
-    unit_of_measurement: °C
-    icon: mdi:target
-  min_temp:
-    name: Temperatura mínima
-    min: 19
-    max: 22.9
-    step: 0.1
-    unit_of_measurement: °C
-    icon: mdi:target
-  off_temp:
-    name: Temperatura apagado
-    min: 15
-    max: 22
-    step: 0.1
-    unit_of_measurement: °C
-    icon: mdi:snowflake
 # keyboard:
 keyboard_remote:
   device_name: 'Bluetooth Keyboard'

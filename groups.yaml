@@ -48,17 +48,6 @@ tv_philips:
   entities:
     - switch.tv_phillips
 
-estufa:
-  name: Estufa
-  control: hidden
-  entities:
-    - switch.estufa
-    - automation.apagar_la_estufa
-    - automation.encender_la_estufa
-    - input_number.max_temp
-    - input_number.min_temp
-    - input_number.off_temp
-
 modem:
   name: Cisco DPC3828
   control: hidden
