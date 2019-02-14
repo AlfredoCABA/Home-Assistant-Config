@@ -1,0 +1,27 @@
+'1550103247453':
+  alias: Música
+  sequence:
+  - data:
+      entity_id: media_player.minicomponente_sony
+    service: media_player.turn_on
+  - delay: '4'
+  - data:
+      entity_id: media_player.minicomponente_sony
+      source: USB
+    service: media_player.select_source
+  - delay: '2'
+  - data:
+      entity_id: media_player.minicomponente_sony
+    service: media_player.media_play
+'1550104001040':
+  alias: Youtube
+  sequence:
+  - data:
+      entity_id: media_player.lfs50g_4847
+      media_content_id: https://www.youtube.com/watch?v=sWREoUz3kZM
+      media_content_type: music
+    service: media_extractor.play_media
+'1550105194443':
+  alias: Esperar 5 segundos
+  sequence:
+  - delay: '5'

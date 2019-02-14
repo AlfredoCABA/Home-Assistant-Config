@@ -56,10 +56,6 @@ modem:
     - sensor.cisco_dpc3828_bytes_sent
     - sensor.cisco_dpc3828_kbytesec_received
     - sensor.cisco_dpc3828_kbytesec_sent
-    - sensor.cisco_dpc3828_packets_received
-    - sensor.cisco_dpc3828_packets_sent
-    - sensor.cisco_dpc3828_packetssec_received
-    - sensor.cisco_dpc3828_packetssec_sent 
 
 # Vistas
 

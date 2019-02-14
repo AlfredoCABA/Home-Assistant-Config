@@ -75,3 +75,17 @@ sensor.cuarto_temperature:
   friendly_name: Cuarto
 media_player.living_tv: {}
 media_player.samsung48_un48ju6700: {}
+sensor.clima_humidity:
+  friendly_name: Humedad exterior
+sensor.clima_pressure:
+  friendly_name: Presión atmosférica
+sensor.clima_temperature:
+  friendly_name: Exterior
+sensor.cisco_dpc3828_packets_received:
+  hidden: true
+sensor.cisco_dpc3828_packets_sent:
+  hidden: true
+sensor.cisco_dpc3828_packetssec_received:
+  hidden: true
+sensor.cisco_dpc3828_packetssec_sent:
+  hidden: true

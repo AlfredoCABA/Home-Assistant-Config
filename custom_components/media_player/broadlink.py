@@ -5,6 +5,7 @@ import socket
 import os.path
 import platform
 import subprocess as sp
+import time
 import voluptuous as vol
 import homeassistant.util as util
 import homeassistant.helpers.config_validation as cv
@@ -14,10 +15,11 @@ from homeassistant.components.media_player import (
     SUPPORT_VOLUME_STEP, SUPPORT_SELECT_SOURCE, SUPPORT_PREVIOUS_TRACK,
     SUPPORT_NEXT_TRACK, MediaPlayerDevice, PLATFORM_SCHEMA, SUPPORT_PAUSE,
     SUPPORT_PLAY, SUPPORT_STOP, SUPPORT_SEEK, SUPPORT_SHUFFLE_SET,
-    MEDIA_TYPE_CHANNEL)
+    MEDIA_TYPE_CHANNEL,MEDIA_TYPE_MUSIC,SUPPORT_PLAY_MEDIA)
 from homeassistant.const import (
     CONF_HOST, CONF_MAC, CONF_TIMEOUT, STATE_OFF, STATE_ON,
-    STATE_PLAYING, STATE_PAUSED, STATE_UNKNOWN, CONF_NAME, CONF_FILENAME)
+    STATE_PLAYING, STATE_PAUSED, STATE_UNKNOWN, 
+    STATE_IDLE, STATE_STANDBY, CONF_NAME, CONF_FILENAME)
 from homeassistant.helpers.event import (async_track_state_change)
 from homeassistant.helpers.restore_state import RestoreEntity
 from homeassistant.core import callback
@@ -27,6 +29,8 @@ from base64 import b64encode, b64decode
 REQUIREMENTS = ['broadlink==0.9.0']
 
 _LOGGER = logging.getLogger(__name__)
+
+VERSION = '1.0.0'
 
 CONF_IRCODES_INI = 'ircodes_ini'
 CONF_PING_HOST = 'ping_host'
@@ -42,7 +46,7 @@ SUPPORT_BROADLINK_TV = SUPPORT_TURN_OFF | SUPPORT_TURN_ON | \
     SUPPORT_VOLUME_MUTE | SUPPORT_VOLUME_STEP | \
     SUPPORT_PREVIOUS_TRACK | SUPPORT_NEXT_TRACK | SUPPORT_PAUSE | \
     SUPPORT_PLAY | SUPPORT_STOP | SUPPORT_SEEK | \
-    SUPPORT_SHUFFLE_SET
+    SUPPORT_SHUFFLE_SET | SUPPORT_SELECT_SOURCE
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
@@ -55,8 +59,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_POWER_CONS_THRESHOLD, default=10): cv.positive_int,
 })
 
-@asyncio.coroutine 
-def async_setup_platform(hass, config, async_add_devices, discovery_info=None):    
+async def async_setup_platform(hass, config, async_add_devices, discovery_info=None):    
     """Set up the Broadlink IR Media Player platform."""
     name = config.get(CONF_NAME)
     ip_addr = config.get(CONF_HOST)
@@ -133,14 +136,13 @@ class BroadlinkIRMediaPlayer(MediaPlayerDevice, RestoreEntity):
             if sensor_state:
                 self._async_update_power_cons(sensor_state)
                 
-    @asyncio.coroutine
-    def _async_power_cons_sensor_changed(self, entity_id, old_state, new_state):
+    async def _async_power_cons_sensor_changed(self, entity_id, old_state, new_state):
         """Handle temperature changes."""
         if new_state is None:
             return
 
         self._async_update_power_cons(new_state)
-        yield from self.async_update_ha_state()
+        await self.async_update_ha_state()
         
     @callback
     def _async_update_power_cons(self, state):
@@ -177,6 +179,9 @@ class BroadlinkIRMediaPlayer(MediaPlayerDevice, RestoreEntity):
                     except socket.timeout:
                         if retry == DEFAULT_RETRY-1:
                             _LOGGER.error("Failed to send packet to Broadlink RM Device")
+                            
+            if len(commands) > 1:
+                time.sleep(.500)
         
     @property
     def name(self):
@@ -226,43 +231,29 @@ class BroadlinkIRMediaPlayer(MediaPlayerDevice, RestoreEntity):
         if self._disallow_on_ir == False:
             self.send_ir('general', 'turn_on')
         
-        self._state = STATE_ON
+        self._state = STATE_IDLE
         self._source = None
         self.schedule_update_ha_state()
     
     def media_play(self):
-        if self._state == STATE_OFF:
-            self._disallow_on_ir = True
-            self._state = STATE_ON
-            self._disallow_on_ir = False
+        self._state = STATE_PLAYING
         
         self.send_ir('general', 'play')
         self.schedule_update_ha_state()
 
     def media_pause(self):
-        if self._state == STATE_OFF:
-            self._disallow_on_ir = True
-            self._state = STATE_ON
-            self._disallow_on_ir = False
+        self._state = STATE_PAUSED
         
         self.send_ir('general', 'pause')
         self.schedule_update_ha_state()
         
     def media_stop(self):
-        if self._state == STATE_OFF:
-            self._disallow_on_ir = True
-            self._state = STATE_ON
-            self._disallow_on_ir = False
+        self._state = STATE_IDLE
         
         self.send_ir('general', 'stop')
         self.schedule_update_ha_state()
 
     def play_media(self, media_type, media_id, **kwargs):
-        if self._state == STATE_OFF:
-            self._disallow_on_ir = True
-            self._state = STATE_ON
-            self._disallow_on_ir = False
-
         if media_type != MEDIA_TYPE_CHANNEL:
             _LOGGER.error('invalid media type')
             return
@@ -270,24 +261,22 @@ class BroadlinkIRMediaPlayer(MediaPlayerDevice, RestoreEntity):
             _LOGGER.error("media_id must be a channel number")
             return
 
+        self._state = STATE_PLAYING
+
         for digit in media_id:
             self.send_ir('sources', 'Channel {}'.format(digit))
         self.schedule_update_ha_state()
         
     def media_previous_track(self):
         if self._state == STATE_OFF:
-            self._disallow_on_ir = True
             self._state = STATE_ON
-            self._disallow_on_ir = False
         
         self.send_ir('general', 'previous_channel')
         self.schedule_update_ha_state()
 
     def media_next_track(self):
         if self._state == STATE_OFF:
-            self._disallow_on_ir = True
             self._state = STATE_ON
-            self._disallow_on_ir = False
         
         self.send_ir('general', 'next_channel')
         self.schedule_update_ha_state()
@@ -314,9 +303,7 @@ class BroadlinkIRMediaPlayer(MediaPlayerDevice, RestoreEntity):
 
     def select_source(self, source):
         if self._state == STATE_OFF:
-            self._disallow_on_ir = True
             self._state = STATE_ON
-            self._disallow_on_ir = False
             
         if self._first_pop_up == True:
             self._source = None
@@ -340,9 +327,11 @@ class BroadlinkIRMediaPlayer(MediaPlayerDevice, RestoreEntity):
         elif self._power_cons_entity_id:
             self._state = STATE_ON if self._current_power_cons > self._power_cons_threshold else STATE_OFF
             
-    @asyncio.coroutine
-    def async_added_to_hass(self):
-        state = yield from self.async_get_last_state()
+    async def async_added_to_hass(self):
+        """Run when entity about to be added."""
+        await super().async_added_to_hass()
         
-        if state is not None:
-            self._state = state.state
+        last_state = await self.async_get_last_state()
+        
+        if last_state is not None:
+            self._state = last_state.state

@@ -25,6 +25,8 @@ frontend:
 # Enables configuration UI
 config:
 
+system_health:
+
 http:
   # Secrets are defined in the file secrets.yaml
   # api_password: !secret http_password
@@ -74,29 +76,22 @@ map:
 sun:
 
 # Weather prediction
-# Weather YWeather
-weather:
-  - platform: yweather
-    name: "Clima"
-    woeid: !secret woeid
 sensor:
-  - platform: template
+  - platform: yr
+    name: "Clima"
     scan_interval: 3600
-    sensors:
-      clima_temperature:
-        friendly_name: "Exterior"
-        value_template: '{{ states.weather.clima.attributes.temperature }}'
-        device_class: temperature
-        unit_of_measurement: '°C'
-      clima_humidity:
-        friendly_name: "Humedad exterior"
-        value_template: '{{ states.weather.clima.attributes.humidity }}'
-        device_class: humidity
-        unit_of_measurement: '%'
-      clima_pressure:
-        friendly_name: "Presión atmosférica"
-        value_template: '{{ states.weather.clima.attributes.pressure }}'
-        unit_of_measurement: hPa
+    monitored_conditions:
+      - temperature
+#        friendly_name: "Exterior"
+#        device_class: temperature
+#        unit_of_measurement: '°C'
+      - humidity
+#        friendly_name: "Humedad exterior"
+#        device_class: humidity
+#        unit_of_measurement: '%'
+      - pressure
+#        friendly_name: "Presión atmosférica"
+#        unit_of_measurement: hPa
 
   - platform: moon
 
@@ -301,7 +296,6 @@ climate:
     ircodes_ini: 'broadlink_climate_codes/samsung.ini'
     min_temp: 16
     max_temp: 30
-    target_temp: 24
     target_temp_step: 1
     temp_sensor: sensor.cuarto_temperature
     default_operation: 'off'
@@ -319,7 +313,7 @@ climate:
         - med
         - high
         - auto
-
+media_extractor:
 media_player:
 #  - platform: gstreamer
   - platform: broadlink
