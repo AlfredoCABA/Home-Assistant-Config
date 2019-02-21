@@ -39,6 +39,12 @@ http:
     - ::1
     - !secret trusted_network
 
+weblink:
+  entities:
+    - name: Home Assistant
+      url: https://www.home-assistant.io
+      icon: mdi:home-assistant
+
 upnp:
   port_mapping: true
   sensors: true
@@ -96,7 +102,7 @@ sensor:
   - platform: moon
 
   - platform: broadlink
-    update_interval: 60
+    scan_interval: 60
     name: "Living"
     host: !secret RM1_ip
     mac: !secret RM1_mac
@@ -104,7 +110,7 @@ sensor:
       - 'temperature'
 
   - platform: broadlink
-    update_interval: 60
+    scan_interval: 60
     name: "Cuarto"
     host: !secret RM2_ip
     mac: !secret RM2_mac
@@ -292,14 +298,12 @@ climate:
     host: !secret IR3_ip
     mac: !secret IR3_mac
     timeout: 15
-    name: Samsung
+    name: Obsoleto
     ircodes_ini: 'broadlink_climate_codes/samsung.ini'
     min_temp: 16
     max_temp: 30
     target_temp_step: 1
     temp_sensor: sensor.cuarto_temperature
-    default_operation: 'off'
-    default_fan_mode: med
     customize:
       operations:
         - 'off'
@@ -313,6 +317,12 @@ climate:
         - med
         - high
         - auto
+  - platform: smartir
+    name: Samsung
+    device_code: 1400
+    controller_send_service: !secret RM1_service
+    temperature_sensor: sensor.cuarto_temperature
+
 media_extractor:
 media_player:
 #  - platform: gstreamer
@@ -325,11 +335,16 @@ media_player:
     ping_host: !secret TV_samsung_ip
 
   - platform: broadlink
-    name: Philips TV
+    name: Philips TV obsoleto
     host: !secret RM2_ip
     mac: !secret RM2_mac
     timeout: 15
     ircodes_ini: 'broadlink_media_codes/philips.ini'
+
+  - platform: smartir
+    name: TV Philips
+    device_code: 1000
+    controller_send_service: !secret RM1_service
 
   - platform: broadlink
     name: Minicomponente Sony
@@ -339,15 +354,19 @@ media_player:
     ircodes_ini: 'broadlink_media_codes/sony.ini'
 
 # keyboard:
-keyboard_remote:
-  device_name: 'Bluetooth Keyboard'
-  type: 'key_down'
+# keyboard_remote:
+#  device_name: 'Bluetooth Keyboard'
+#  type: 'key_down'
 
 google_assistant:
   project_id: !secret project_id
   api_key: !secret api_key
+  expose_by_default: false
   exposed_domains:
-    - switch
+    - climate
+    - light
+    - media_player
+    - script
   entity_config:
      switch.bar_lights:
        name: Luz del techo
@@ -359,6 +378,10 @@ google_assistant:
      switch.wakeup_the_broadlink2:
        expose: false
 
+googlehome:
+  devices:
+    - host: 192.168.0.17
+      track_alarms: true
 
 shopping_list:
 
@@ -367,6 +390,12 @@ light:
     lights:
       luz_techo:
         friendly_name: "Luz del techo"
+        value_template: >-
+          {% if is_state('switch.bar_lights', 'on') %}
+            on
+          {% else %}
+            off
+          {% endif %}
         turn_on:
           service: !secret RM1_service
           data:

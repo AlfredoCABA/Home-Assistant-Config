@@ -11,9 +11,11 @@ import homeassistant.util as util
 import homeassistant.helpers.config_validation as cv
 
 from homeassistant.components.media_player import (
+    MediaPlayerDevice, PLATFORM_SCHEMA)
+from homeassistant.components.media_player.const import (
     SUPPORT_TURN_ON, SUPPORT_TURN_OFF, SUPPORT_VOLUME_MUTE, 
     SUPPORT_VOLUME_STEP, SUPPORT_SELECT_SOURCE, SUPPORT_PREVIOUS_TRACK,
-    SUPPORT_NEXT_TRACK, MediaPlayerDevice, PLATFORM_SCHEMA, SUPPORT_PAUSE,
+    SUPPORT_NEXT_TRACK, SUPPORT_PAUSE,
     SUPPORT_PLAY, SUPPORT_STOP, SUPPORT_SEEK, SUPPORT_SHUFFLE_SET,
     MEDIA_TYPE_CHANNEL,MEDIA_TYPE_MUSIC,SUPPORT_PLAY_MEDIA)
 from homeassistant.const import (
@@ -30,7 +32,7 @@ REQUIREMENTS = ['broadlink==0.9.0']
 
 _LOGGER = logging.getLogger(__name__)
 
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 
 CONF_IRCODES_INI = 'ircodes_ini'
 CONF_PING_HOST = 'ping_host'

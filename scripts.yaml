@@ -22,6 +22,40 @@
       media_content_type: music
     service: media_extractor.play_media
 '1550105194443':
-  alias: Esperar 5 segundos
+  alias: Espera 1 segundo
   sequence:
-  - delay: '5'
+  - delay: '1'
+'1550195767299':
+  alias: Atenuar y apagar luz
+  sequence:
+  - data:
+      entity_id: switch.wakeup_the_broadlink
+    service: switch.turn_on
+  - delay: '1'
+  - data:
+      entity_id: switch.bar_lights_full
+    service: switch.turn_off
+  - delay: '6'
+  - data:
+      entity_id: switch.bar_lights
+    service: switch.turn_off
+'1550201523999':
+  alias: PC
+  sequence:
+  - data:
+      entity_id: media_player.samsung_tv
+    service: media_player.turn_on
+  - delay: '1'
+  - data:
+      entity_id: media_player.samsung_tv
+      source: HDMI 3
+    service: media_player.select_source
+  - delay: '1'
+  - data:
+      packet: "sgM0AA4iDiMoCw4A"
+    service: !secret RM1_service
+  - delay: '1'
+  - data:
+      packet: "sgM0AA4iDiMoCw4A"
+    service: !secret RM1_service
+
