@@ -120,6 +120,12 @@ sensor:
   - platform: season
     type: astronomical
 
+  - platform: github
+    access_token: !secret github_access_token
+    repositories:
+      - path: 'home-assistant/home-assistant'
+      - path: 'smartHomeHub/SmartIR'
+
 #  - platform: linux_battery
 #    name: "Mouse"
 #    battery: 1
