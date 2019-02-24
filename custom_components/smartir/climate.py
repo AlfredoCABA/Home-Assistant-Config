@@ -7,7 +7,6 @@ import os.path
 
 import voluptuous as vol
 
-from homeassistant.core import callback, split_entity_id
 """
 from homeassistant.components.climate import ClimateDevice, PLATFORM_SCHEMA
 from homeassistant.components.climate.const import (
@@ -20,15 +19,17 @@ from homeassistant.components.climate import (
     SUPPORT_OPERATION_MODE, SUPPORT_TARGET_TEMPERATURE, SUPPORT_FAN_MODE,
     SUPPORT_ON_OFF, PLATFORM_SCHEMA)
 from homeassistant.const import (
-    STATE_OFF, STATE_ON, ATTR_TEMPERATURE, CONF_NAME, STATE_UNKNOWN,
+    CONF_NAME, STATE_OFF, STATE_ON, STATE_UNKNOWN, ATTR_TEMPERATURE,
     PRECISION_HALVES, PRECISION_TENTHS, PRECISION_WHOLE)
+from homeassistant.core import callback, split_entity_id
 from homeassistant.helpers.event import async_track_state_change
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.restore_state import RestoreEntity
+from . import Helper
 
 _LOGGER = logging.getLogger(__name__)
 
-VERSION = '1.0.0'
+VERSION = '1.1.1'
 
 DEFAULT_NAME = "SmartIR Climate"
 
@@ -64,26 +65,45 @@ async def async_setup_platform(hass, config, async_add_devices, discovery_info=N
     power_sensor = config.get(CONF_POWER_SENSOR)
 
     abspath = os.path.dirname(os.path.abspath(__file__))
-    device_json_file = "{}/codes/climate/{}.json".format(abspath, device_code)
+    device_files_subdir = os.path.join('codes', 'climate')
+    device_files_path = os.path.join(abspath, device_files_subdir)
 
-    if not os.path.exists(device_json_file):
-        _LOGGER.error("The device JSON file was not found. [%s]", device_json_file)
-        return
+    if not os.path.isdir(device_files_path):
+        os.makedirs(device_files_path)
 
-    with open(device_json_file) as j:
+    device_json_filename = str(device_code) + '.json'
+    device_json_path = os.path.join(device_files_path, device_json_filename)
+
+    if not os.path.exists(device_json_path):
+        _LOGGER.warning("Couldn't find the device Json file. The component will " \
+                        "try to download it from the GitHub repo.")
+
+        try:
+            codes_source = ("https://raw.githubusercontent.com/"
+                            "smartHomeHub/SmartIR/master/smartir/"
+                            "codes/climate/{}.json")
+
+            Helper.downloader(codes_source.format(device_code), device_json_path)
+        except:
+            _LOGGER.error("There was an error while downloading the device Json file. " \
+                          "Please check your internet connection or the device code " \
+                          "exists on GitHub. If the problem still exists please " \
+                          "place the file manually in the proper location.")
+            return
+
+    with open(device_json_path) as j:
         try:
             device_data = json.load(j)
         except:
-            _LOGGER.error("The device JSON file is invalid")
+            _LOGGER.error("The device Json file is invalid")
             return
 
-    async_add_devices([IRClimate(
+    async_add_devices([SmartIRClimate(
         hass, name, device_code, device_data, controller_send_service, 
         temperature_sensor, humidity_sensor, power_sensor
     )])
 
-class IRClimate(ClimateDevice, RestoreEntity):
-
+class SmartIRClimate(ClimateDevice, RestoreEntity):
     def __init__(self, hass, name, device_code, device_data, 
                  controller_send_service, temperature_sensor, 
                  humidity_sensor, power_sensor):
@@ -155,15 +175,6 @@ class IRClimate(ClimateDevice, RestoreEntity):
                                      self._async_power_sensor_changed)
 
     @property
-    def state(self):
-        """Return the current state."""
-        if self._on_by_remote:
-            return STATE_ON
-        if self.current_operation != STATE_OFF:
-            return self.current_operation
-        return STATE_OFF
-
-    @property
     def should_poll(self):
         """Return the polling state."""
         return False
@@ -172,6 +183,15 @@ class IRClimate(ClimateDevice, RestoreEntity):
     def name(self):
         """Return the name of the climate device."""
         return self._name
+
+    @property
+    def state(self):
+        """Return the current state."""
+        if self._on_by_remote:
+            return STATE_ON
+        if self.current_operation != STATE_OFF:
+            return self.current_operation
+        return STATE_OFF
 
     @property
     def temperature_unit(self):
@@ -201,7 +221,7 @@ class IRClimate(ClimateDevice, RestoreEntity):
     @property
     def precision(self):
         """Return the precision of the system."""
-        return self._precision
+        return PRECISION_TENTHS
 
     @property
     def operation_list(self):
@@ -334,6 +354,16 @@ class IRClimate(ClimateDevice, RestoreEntity):
                         command = b64encode(command).decode('utf-8')
                     except:
                         _LOGGER.error("Error while converting Hex to Base64")
+                        return
+                elif commands_encoding.lower() == 'pronto':
+                    try:
+                        command = command.replace(' ',"")
+                        command = bytearray.fromhex(command)
+                        command = Helper.pronto2lirc(command)
+                        command = Helper.lirc2broadlink(command)
+                        command = b64encode(command).decode('utf-8')
+                    except:
+                        _LOGGER.error("Error while converting Pronto to Base64")
                         return
                 else:
                     _LOGGER.error("The commands encoding provided in the JSON file is not supported")
