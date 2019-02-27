@@ -16,11 +16,14 @@
 '1550104001040':
   alias: Youtube
   sequence:
-  - data:
+  - data_template:
       entity_id: media_player.lfs50g_4847
-      media_content_id: https://www.youtube.com/watch?v=sWREoUz3kZM
+      media_content_id: "{{ states('input_select.which_youtube') }}"
       media_content_type: music
     service: media_extractor.play_media
+  - data:
+      entity_id: input_select.which_youtube
+    service: input_select.select_next
 '1550105194443':
   alias: Espera 1 segundo
   sequence:

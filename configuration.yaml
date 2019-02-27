@@ -44,6 +44,9 @@ weblink:
     - name: Home Assistant
       url: https://www.home-assistant.io
       icon: mdi:home-assistant
+    - name: SmartIR
+      url: https://github.com/smartHomeHub/SmartIR
+      icon: mdi:remote
 
 upnp:
   port_mapping: true
@@ -147,6 +150,18 @@ cloud:
 group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
+input_select:
+  which_youtube:
+    name: ¿Qué escuchamos?
+    options:
+      #Gigi D'Agostino - I'll Fly with You (Adryx-G Bounce Remake)
+      - https://www.youtube.com/watch?v=fzB3BzoZw8M
+      # Spectre remix
+      - https://www.youtube.com/watch?v=SiOBbwY2TWA
+      # Sing Me To Sleep DOPEDROP
+      - https://www.youtube.com/watch?v=QZx4889XYSo
+    initial: https://www.youtube.com/watch?v=fzB3BzoZw8M
+    icon: mdi:youtube
 
 switch:
   - platform: broadlink
