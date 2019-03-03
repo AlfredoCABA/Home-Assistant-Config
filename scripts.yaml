@@ -24,10 +24,6 @@
   - data:
       entity_id: input_select.which_youtube
     service: input_select.select_next
-'1550105194443':
-  alias: Espera 1 segundo
-  sequence:
-  - delay: '1'
 '1550195767299':
   alias: Atenuar y apagar luz
   sequence:

@@ -57,32 +57,72 @@ modem:
     - sensor.cisco_dpc3828_kbytesec_received
     - sensor.cisco_dpc3828_kbytesec_sent
 
+sensores:
+  name: Sensores
+  control: hidden
+  entities:
+    - sensor.clima_humidity
+    - sensor.clima_pressure
+    - sensor.clima_temperature
+    - sensor.cuarto_temperature
+    - sensor.living_temperature
+    - sensor.moon
+    - sensor.season
+    - sun.sun
+    - sensor.porongo_alarm
+    - sensor.porongo_timer
+
 # Vistas
+default_view:
+  view: true
+  icon: mdi:home
+  entities:
+    - script.1550195767299
+    - script.1550103247453
+    - script.1550201523999
+    - script.1550104001040
+    - input_select.which_youtube
+    - group.climate
+    - group.sensores
 
 living:
   name: Living
   view: yes
+  icon: mdi:sofa
   entities:
-    - group.luz
     - sensor.clima_temperature
     - sensor.living_temperature
+    - light.luz_techo
     - climate.living
     - media_player.samsung_tv
+    - media_player.lfs50g_4847
+    - script.1550195767299
+    - script.1550201523999
+    - script.1550104001040
+    - input_select.which_youtube
 
 dormitorio:
   name: Dormitorio
   view: yes
+  icon: mdi:bed-empty
   entities:
     - media_player.minicomponente_sony
-    - group.aa_samsung
     - climate.samsung
+    - script.1550103247453
 
 cuarto:
   name: Cuarto
   view: yes
+  icon: mdi:fish
   entities:
     - sensor.clima_temperature
     - sensor.cuarto_temperature
-    - media_player.philips_tv
+    - media_player.philips_tv_obsoleto
+    - media_player.tv_philips
 
-
+otros:
+  name: Otros
+  icon: mdi:check-network
+  view: yes
+  entities:
+    - group.modem

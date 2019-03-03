@@ -89,3 +89,5 @@ sensor.cisco_dpc3828_packetssec_received:
   hidden: true
 sensor.cisco_dpc3828_packetssec_sent:
   hidden: true
+group.all_scripts:
+  order: 1

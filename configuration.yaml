@@ -74,6 +74,19 @@ conversation:
 
 # Enables support for tracking state changes over time
 history:
+  exclude:
+    domains:
+      - weblink
+      - updater
+    entities:
+      - group.cuarto
+      - group.default_view
+      - group.all_switches
+      - group.all_scripts
+      - group.all_devices
+      - group.dormitorio
+      - group.living
+      - group.all_lights
 
 # View all events in a logbook
 logbook:
@@ -315,33 +328,10 @@ climate:
     min_cycle_duration:
       minutes: 20
 
-  - platform: broadlink
-    host: !secret IR3_ip
-    mac: !secret IR3_mac
-    timeout: 15
-    name: Obsoleto
-    ircodes_ini: 'broadlink_climate_codes/samsung.ini'
-    min_temp: 16
-    max_temp: 30
-    target_temp_step: 1
-    temp_sensor: sensor.cuarto_temperature
-    customize:
-      operations:
-        - 'off'
-        - cool
-        - heat
-        - auto
-        - dry
-        - fan
-      fan_modes:
-        - low
-        - med
-        - high
-        - auto
   - platform: smartir
     name: Samsung
     device_code: 1400
-    controller_send_service: !secret RM1_service
+    controller_send_service: !secret IR3_service
     temperature_sensor: sensor.cuarto_temperature
 
 media_extractor:
@@ -382,18 +372,18 @@ media_player:
 google_assistant:
   project_id: !secret project_id
   api_key: !secret api_key
-  expose_by_default: false
+  expose_by_default: true
   exposed_domains:
     - climate
     - light
     - media_player
     - script
   entity_config:
-     switch.bar_lights:
-       name: Luz del techo
-       aliases:
-         - Luz del living
-         - La luz
+#     switch.bar_lights:
+#       name: Luz del techo
+#       aliases:
+#         - Luz del living
+#         - La luz
      switch.wakeup_the_broadlink:
        expose: false
      switch.wakeup_the_broadlink2:
