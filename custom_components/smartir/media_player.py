@@ -11,18 +11,20 @@ from homeassistant.components.media_player import (
     MediaPlayerDevice, PLATFORM_SCHEMA)
 from homeassistant.components.media_player.const import (
     SUPPORT_TURN_OFF, SUPPORT_TURN_ON, SUPPORT_PREVIOUS_TRACK,
-    SUPPORT_NEXT_TRACK, SUPPORT_VOLUME_STEP,SUPPORT_VOLUME_MUTE, 
-    SUPPORT_SELECT_SOURCE, MEDIA_TYPE_CHANNEL)
+    SUPPORT_NEXT_TRACK, SUPPORT_VOLUME_STEP,SUPPORT_VOLUME_MUTE,
+    SUPPORT_SELECT_SOURCE, MEDIA_TYPE_CHANNEL, SUPPORT_PAUSE,
+    SUPPORT_PLAY, SUPPORT_STOP, SUPPORT_SEEK, SUPPORT_SHUFFLE_SET,
+    MEDIA_TYPE_MUSIC, SUPPORT_PLAY_MEDIA)
 from homeassistant.const import (
-    CONF_NAME, STATE_OFF, STATE_ON, STATE_UNKNOWN)
+    CONF_NAME, STATE_OFF, STATE_ON, STATE_UNKNOWN,
+    STATE_PLAYING, STATE_PAUSED, 
+    STATE_IDLE, STATE_STANDBY)
 from homeassistant.core import callback, split_entity_id
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers.restore_state import RestoreEntity
 from . import Helper
 
 _LOGGER = logging.getLogger(__name__)
-
-VERSION = '1.1.1'
 
 DEFAULT_NAME = "SmartIR Media Player"
 
@@ -110,6 +112,15 @@ class SmartIRMediaPlayer(MediaPlayerDevice, RestoreEntity):
         if 'on' in self._commands and self._commands['on'] is not None:
             self._support_flags = self._support_flags | SUPPORT_TURN_ON
 
+        if 'pause' in self._commands and self._commands['pause'] is not None:
+            self._support_flags = self._support_flags | SUPPORT_PAUSE
+
+        if 'play' in self._commands and self._commands['play'] is not None:
+            self._support_flags = self._support_flags | SUPPORT_PLAY
+
+        if 'stop' in self._commands and self._commands['stop'] is not None:
+            self._support_flags = self._support_flags | SUPPORT_STOP
+
         if 'previousChannel' in self._commands and self._commands['previousChannel'] is not None:
             self._support_flags = self._support_flags | SUPPORT_PREVIOUS_TRACK
 
@@ -195,14 +206,28 @@ class SmartIRMediaPlayer(MediaPlayerDevice, RestoreEntity):
     async def async_turn_off(self):
         """Turn the media player off."""
         self._state = STATE_OFF
-        self._source = None
         await self.send_command(self._commands['off'])
         await self.async_update_ha_state()
 
     async def async_turn_on(self):
         """Turn the media player off."""
-        self._state = STATE_ON
+        self._state = STATE_IDLE
         await self.send_command(self._commands['on'])
+        await self.async_update_ha_state()
+
+    async def async_media_play(self):
+        self._state = STATE_PLAYING
+        await self.send_command(self._commands['play'])
+        await self.async_update_ha_state()
+
+    async def async_media_pause(self):
+        self._state = STATE_PAUSED
+        await self.send_command(self._commands['pause'])
+        await self.async_update_ha_state()
+
+    async def async_media_stop(self):
+        self._state = STATE_IDLE
+        await self.send_command(self._commands['stop'])
         await self.async_update_ha_state()
 
     async def async_media_previous_track(self):
@@ -287,6 +312,6 @@ class SmartIRMediaPlayer(MediaPlayerDevice, RestoreEntity):
         if power_state:
             if power_state.state == STATE_OFF:
                 self._state = STATE_OFF
-                self._source = None
             elif power_state.state == STATE_ON:
-                self._state = STATE_ON
+                if self._state == STATE_OFF:
+                    self._state = STATE_IDLE

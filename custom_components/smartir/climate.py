@@ -17,7 +17,7 @@ from homeassistant.components.climate.const import (
 from homeassistant.components.climate import (
     STATE_HEAT, STATE_COOL, STATE_AUTO, STATE_DRY, ClimateDevice,
     SUPPORT_OPERATION_MODE, SUPPORT_TARGET_TEMPERATURE, SUPPORT_FAN_MODE,
-    SUPPORT_ON_OFF, PLATFORM_SCHEMA)
+    SUPPORT_ON_OFF, PLATFORM_SCHEMA, DOMAIN)
 from homeassistant.const import (
     CONF_NAME, STATE_OFF, STATE_ON, STATE_UNKNOWN, ATTR_TEMPERATURE,
     PRECISION_HALVES, PRECISION_TENTHS, PRECISION_WHOLE)
@@ -28,8 +28,6 @@ from homeassistant.helpers.restore_state import RestoreEntity
 from . import Helper
 
 _LOGGER = logging.getLogger(__name__)
-
-VERSION = '1.1.1'
 
 DEFAULT_NAME = "SmartIR Climate"
 
@@ -219,11 +217,6 @@ class SmartIRClimate(ClimateDevice, RestoreEntity):
         return self._precision
 
     @property
-    def precision(self):
-        """Return the precision of the system."""
-        return PRECISION_TENTHS
-
-    @property
     def operation_list(self):
         """Return the list of available operation modes."""
         return self._operation_modes
@@ -400,12 +393,14 @@ class SmartIRClimate(ClimateDevice, RestoreEntity):
         if new_state is None:
             return
 
-        if new_state.state == STATE_OFF and self._current_operation != STATE_OFF:
-            self._current_operation = STATE_OFF
-            await self.async_update_ha_state()
-
         if new_state.state == STATE_ON and self._current_operation == STATE_OFF:
             self._on_by_remote = True
+            await self.async_update_ha_state()
+
+        if new_state.state == STATE_OFF:
+            self._on_by_remote = False
+            if self._current_operation != STATE_OFF:
+                self._current_operation = STATE_OFF
             await self.async_update_ha_state()
 
     @callback

@@ -1,6 +1,6 @@
 homeassistant:
   # Name of the location where Home Assistant is running
-  name: Departamento
+  name: Depto
   # Location required to calculate the time the sun rises and sets
   latitude: !secret latitude
   longitude: !secret longitude
@@ -149,7 +149,11 @@ sensor:
 #  - platform: linux_battery
 #    name: "Teclado"
 #    battery: 2
-
+binary_sensor:
+  - platform: ping
+    name: Living TV
+    host: !secret TV_samsung_ip
+    scan_interval: 20
 # Text to speech
 tts:
   - platform: google
@@ -345,6 +349,12 @@ media_player:
     ircodes_ini: 'broadlink_media_codes/samsung.ini'
     ping_host: !secret TV_samsung_ip
 
+  - platform: smartir
+    name: TV Samsung
+    device_code: 1400
+    controller_send_service: !secret RM1_service
+    power_sensor: binary_sensor.living_tv
+
   - platform: broadlink
     name: Philips TV obsoleto
     host: !secret RM2_ip
@@ -355,7 +365,7 @@ media_player:
   - platform: smartir
     name: TV Philips
     device_code: 1000
-    controller_send_service: !secret RM1_service
+    controller_send_service: !secret RM2_service
 
   - platform: broadlink
     name: Minicomponente Sony

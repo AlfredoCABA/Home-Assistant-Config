@@ -72,34 +72,29 @@ sensores:
     - sensor.porongo_alarm
     - sensor.porongo_timer
 
-# Vistas
-default_view:
-  view: true
-  icon: mdi:home
+esc_living:
+  name: Escenas
+  control: hidden
   entities:
+    - light.luz_techo
     - script.1550195767299
-    - script.1550103247453
     - script.1550201523999
     - script.1550104001040
     - input_select.which_youtube
-    - group.climate
-    - group.sensores
 
-living:
+# Vistas
+default_view:
   name: Living
   view: yes
   icon: mdi:sofa
   entities:
     - sensor.clima_temperature
     - sensor.living_temperature
-    - light.luz_techo
     - climate.living
     - media_player.samsung_tv
+    - media_player.tv_samsung
     - media_player.lfs50g_4847
-    - script.1550195767299
-    - script.1550201523999
-    - script.1550104001040
-    - input_select.which_youtube
+    - group.esc_living
 
 dormitorio:
   name: Dormitorio
@@ -121,8 +116,12 @@ cuarto:
     - media_player.tv_philips
 
 otros:
-  name: Otros
-  icon: mdi:check-network
+  name: Casa
   view: yes
+  icon: mdi:home
   entities:
     - group.modem
+    - group.sensores
+    - updater.updater
+    - weblink.home_assistant
+    - weblink.smartir
