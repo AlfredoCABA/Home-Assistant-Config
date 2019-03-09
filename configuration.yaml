@@ -15,6 +15,11 @@ homeassistant:
   auth_providers:
     - type: homeassistant
     - type: trusted_networks
+      trusted_networks:
+        - 127.0.0.1
+        - ::1
+        - !secret trusted_network
+
 
 # Show links to resources in log and frontend
 # introduction:
@@ -34,10 +39,6 @@ http:
   base_url: !secret base_url
   ssl_certificate: !secret ssl_certificate
   ssl_key: !secret ssl_key
-  trusted_networks:
-    - 127.0.0.1
-    - ::1
-    - !secret trusted_network
 
 weblink:
   entities:
@@ -154,6 +155,12 @@ binary_sensor:
     name: Living TV
     host: !secret TV_samsung_ip
     scan_interval: 20
+
+  - platform: tod
+    name: Amanecer
+    after: '06:10'
+    before: sunrise
+    before_offset: '+01:00'
 # Text to speech
 tts:
   - platform: google
@@ -177,6 +184,14 @@ input_select:
       - https://www.youtube.com/watch?v=SiOBbwY2TWA
       # Sing Me To Sleep DOPEDROP
       - https://www.youtube.com/watch?v=QZx4889XYSo
+      # Julia Michaels - Issues (Paul Gannon remix)
+      - https://www.youtube.com/watch?v=71s935zldSE
+      # Julia Michaels - Issues [REMIX] [Shuffle Dance]
+      - https://www.youtube.com/watch?v=EbUUm3vlxzs
+      # Julia Michaels - Issues (Paul Gannon Bootleg)
+      - https://www.youtube.com/watch?v=WISn6Q_KHZE
+      # Issues - Julia Michaels (Remix) ♫ Shuffle Dance (Music video) Electro House
+      - https://www.youtube.com/watch?v=n6CqPDfEWk4
     initial: https://www.youtube.com/watch?v=fzB3BzoZw8M
     icon: mdi:youtube
 
@@ -341,38 +356,22 @@ climate:
 media_extractor:
 media_player:
 #  - platform: gstreamer
-  - platform: broadlink
-    name: Samsung TV
-    host: !secret RM1_ip
-    mac: !secret RM1_mac
-    timeout: 15
-    ircodes_ini: 'broadlink_media_codes/samsung.ini'
-    ping_host: !secret TV_samsung_ip
 
   - platform: smartir
     name: TV Samsung
     device_code: 1400
     controller_send_service: !secret RM1_service
-    power_sensor: binary_sensor.living_tv
-
-  - platform: broadlink
-    name: Philips TV obsoleto
-    host: !secret RM2_ip
-    mac: !secret RM2_mac
-    timeout: 15
-    ircodes_ini: 'broadlink_media_codes/philips.ini'
+    power_sensor: binary_sensor.living_tvselect
 
   - platform: smartir
     name: TV Philips
     device_code: 1000
     controller_send_service: !secret RM2_service
 
-  - platform: broadlink
-    name: Minicomponente Sony
-    host: !secret IR3_ip
-    mac: !secret IR3_mac
-    timeout: 15
-    ircodes_ini: 'broadlink_media_codes/sony.ini'
+  - platform: smartir
+    name: Sony
+    device_code: 1500
+    controller_send_service: !secret IR3_service
 
 # keyboard:
 # keyboard_remote:
@@ -401,7 +400,7 @@ google_assistant:
 
 googlehome:
   devices:
-    - host: 192.168.0.17
+    - host: !secret googlehome_ip
       track_alarms: true
 
 shopping_list:

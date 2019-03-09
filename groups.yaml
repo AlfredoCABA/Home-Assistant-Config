@@ -91,7 +91,6 @@ default_view:
     - sensor.clima_temperature
     - sensor.living_temperature
     - climate.living
-    - media_player.samsung_tv
     - media_player.tv_samsung
     - media_player.lfs50g_4847
     - group.esc_living
@@ -101,7 +100,7 @@ dormitorio:
   view: yes
   icon: mdi:bed-empty
   entities:
-    - media_player.minicomponente_sony
+    - media_player.sony
     - climate.samsung
     - script.1550103247453
 
@@ -112,7 +111,6 @@ cuarto:
   entities:
     - sensor.clima_temperature
     - sensor.cuarto_temperature
-    - media_player.philips_tv_obsoleto
     - media_player.tv_philips
 
 otros:

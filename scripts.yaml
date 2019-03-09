@@ -2,30 +2,31 @@
   alias: Música
   sequence:
   - data:
-      entity_id: media_player.minicomponente_sony
+      entity_id: media_player.sony
     service: media_player.turn_on
   - delay: '4'
   - data:
-      entity_id: media_player.minicomponente_sony
+      entity_id: media_player.sony
       source: USB
     service: media_player.select_source
   - delay: '2'
   - data:
-      entity_id: media_player.minicomponente_sony
+      entity_id: media_player.sony
     service: media_player.media_play
 '1550104001040':
-  alias: Youtube
+  alias: Melodía
   sequence:
   - data_template:
       entity_id: media_player.lfs50g_4847
       media_content_id: "{{ states('input_select.which_youtube') }}"
       media_content_type: music
     service: media_extractor.play_media
+  - delay: '3'
   - data:
       entity_id: input_select.which_youtube
     service: input_select.select_next
 '1550195767299':
-  alias: Atenuar y apagar luz
+  alias: Penumbra
   sequence:
   - data:
       entity_id: switch.wakeup_the_broadlink
@@ -42,12 +43,12 @@
   alias: PC
   sequence:
   - data:
-      entity_id: media_player.samsung_tv
+      entity_id: media_player.tv_samsung
     service: media_player.turn_on
   - delay: '1'
   - data:
-      entity_id: media_player.samsung_tv
-      source: HDMI 3
+      entity_id: media_player.tv_samsung
+      source: HDMI3
     service: media_player.select_source
   - delay: '1'
   - data:
