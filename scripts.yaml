@@ -21,7 +21,7 @@
       media_content_id: "{{ states('input_select.which_youtube') }}"
       media_content_type: music
     service: media_extractor.play_media
-  - delay: '3'
+  - delay: '2'
   - data:
       entity_id: input_select.which_youtube
     service: input_select.select_next

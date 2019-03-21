@@ -26,6 +26,7 @@ homeassistant:
 
 # Enables the frontend
 frontend:
+  themes: !include_dir_merge_named themes/
 
 # Enables configuration UI
 config:
@@ -180,19 +181,20 @@ input_select:
     options:
       #Gigi D'Agostino - I'll Fly with You (Adryx-G Bounce Remake)
       - https://www.youtube.com/watch?v=fzB3BzoZw8M
-      # Spectre remix
-      - https://www.youtube.com/watch?v=SiOBbwY2TWA
+      # Alan Walker - The Spectre
+      - https://www.youtube.com/watch?v=wJnBTPUQS5A
       # Sing Me To Sleep DOPEDROP
       - https://www.youtube.com/watch?v=QZx4889XYSo
-      # Julia Michaels - Issues (Paul Gannon remix)
-      - https://www.youtube.com/watch?v=71s935zldSE
-      # Julia Michaels - Issues [REMIX] [Shuffle Dance]
-      - https://www.youtube.com/watch?v=EbUUm3vlxzs
-      # Julia Michaels - Issues (Paul Gannon Bootleg)
+      # Julia Michaels - Issues (Paul Gannon Bootleg) MQ
       - https://www.youtube.com/watch?v=WISn6Q_KHZE
-      # Issues - Julia Michaels (Remix) ♫ Shuffle Dance (Music video) Electro House
-      - https://www.youtube.com/watch?v=n6CqPDfEWk4
-    initial: https://www.youtube.com/watch?v=fzB3BzoZw8M
+      # Julia Michaels - Issues (Alan Walker Remix) HQ
+      - https://www.youtube.com/watch?v=4IefnBAiu64
+      # Dimitri Vegas, Martin Garrix, Like Mike - Tremor (Sensation 2014 Anthem) (Original Mix)
+      - https://www.youtube.com/watch?v=RERH5MaNS54
+      # Lilly Wood & The Prick and Robin Schulz - Prayer In C (Alex D Bootleg) LQ
+      - https://www.youtube.com/watch?v=1LF58vWAgfc
+      # Lilly Wood ft. The Prick & Robin Schulz - Prayer In C (Alex D Remix) BASS BOOSTED
+      - https://www.youtube.com/watch?v=gCMb6vwsWI0
     icon: mdi:youtube
 
 switch:
