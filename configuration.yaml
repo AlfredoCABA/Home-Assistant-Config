@@ -181,20 +181,22 @@ input_select:
     options:
       #Gigi D'Agostino - I'll Fly with You (Adryx-G Bounce Remake)
       - https://www.youtube.com/watch?v=fzB3BzoZw8M
-      # Alan Walker - The Spectre
-      - https://www.youtube.com/watch?v=wJnBTPUQS5A
+      # Alan Walker - The Spectre (LUM!X Remix)
+      - https://soundcloud.com/lumix_music/alan-walker-the-spectre-lumx-remix
       # Sing Me To Sleep DOPEDROP
-      - https://www.youtube.com/watch?v=QZx4889XYSo
-      # Julia Michaels - Issues (Paul Gannon Bootleg) MQ
-      - https://www.youtube.com/watch?v=WISn6Q_KHZE
-      # Julia Michaels - Issues (Alan Walker Remix) HQ
-      - https://www.youtube.com/watch?v=4IefnBAiu64
+      - https://soundcloud.com/dopedropmusic/sing-me-to-sleep-dopedrop-remix-alan-walker
+      # Julia Michaels - Issues (Paul Gannon Bootleg)
+      - https://soundcloud.com/draymon-binset/melbourne-bounce-julia
       # Dimitri Vegas, Martin Garrix, Like Mike - Tremor (Sensation 2014 Anthem) (Original Mix)
       - https://www.youtube.com/watch?v=RERH5MaNS54
-      # Lilly Wood & The Prick and Robin Schulz - Prayer In C (Alex D Bootleg) LQ
-      - https://www.youtube.com/watch?v=1LF58vWAgfc
-      # Lilly Wood ft. The Prick & Robin Schulz - Prayer In C (Alex D Remix) BASS BOOSTED
-      - https://www.youtube.com/watch?v=gCMb6vwsWI0
+      # Lilly Wood & The Prick and Robin Schulz - Prayer In C (Alex D Bootleg)
+      - https://soundcloud.com/alex-d-official-1/prayer-in-c-alex-d-bootleg
+      # Ed Sheeran - Shape Of You (Paul Gannon Bootleg)
+      - https://soundcloud.com/musicfromaliens/ed-sheeran-shape-of-you-paul-gannon-bootleg
+      # Alan Walker & David Whistle - Routine (DOPEDROP Remix)
+      - https://soundcloud.com/dopedropmusic/alan-walker-david-whistle-routine-dopedrop-remix
+      # Alan Walker - Faded (Paul Gannon Remix)
+      - https://soundcloud.com/callum-vlogs-414891955/alan-walker-faded-paul-gannon
     icon: mdi:youtube
 
 switch:
@@ -355,6 +357,9 @@ climate:
     controller_send_service: !secret IR3_service
     temperature_sensor: sensor.cuarto_temperature
 
+cast:
+  media_player:
+    - host: !secret googlehome_ip
 media_extractor:
 media_player:
 #  - platform: gstreamer
