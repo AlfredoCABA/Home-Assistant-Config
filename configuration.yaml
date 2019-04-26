@@ -135,6 +135,15 @@ sensor:
     monitored_conditions:
       - 'temperature'
 
+ # - platform: template
+ #   sensors:
+ #     power:
+ #       friendly_name: "Potencia"
+ #       unit_of_measurement: 'W'
+ #       value_template: >
+ #         {% set s =  state_attr('switch.sp2', 'current_power_w') %}
+ #         {{ s | float if s else 0.0 }}
+
   - platform: season
     type: astronomical
 
@@ -164,7 +173,8 @@ binary_sensor:
     before_offset: '+01:00'
 # Text to speech
 tts:
-  - platform: google
+  - platform: google_translate
+    service_name: google_say
     language: 'es'
 #  - platform: picotts
 #    language: 'es-ES'
@@ -313,12 +323,18 @@ switch:
         command_on: 'JgDyABMAAkhkAAEkEg8RMBEQEBAPEg8REBEPEg8RDzIQEQ8TDjMOEg8SETAPMhAyDzIPMg8SDxEPEg8SDxEPEw4SDhMOEg8SERAPEQ8SDxEQEQ8SDxEPEg8REBEPEg8RDxMOEg8SDhMOEg4TEQ8REA8SDxEPMhAyDzIPMg9kYAABJw8zDhMOEg4TDhIREA8SDxEPEg8yDxIPEQ8SDxIPEg4SDzMOMw4zETEQEA8yDxIPMg8yDxIPEg8RDzIQMg8zDhIPEhEQEBAPEg8RDxIPEg8yDzIPEg8RDxMOMw4TDxEOExEPERAPEg8RDzIQMg8yDzIPAA0FAAAAAAAA'
         command_off: 'JgBoARMAAkljAAElERARMBEQEQ8SDxEPEg8REBEPEjAREBARDjMQMREQETARMBIvEjARMBEPEg8REBEPEhAQEA4TEBERDxEQERARDxEQEQ8SDxEQEQ8REBEPEg8REBEQERAQEBEQEBASDxEQEQ8SDxEQEQ8SDxEPEjARMA9jYAABKBIwEBEQEA4TEBAREBEQEQ8SDxEwERARDxIvEg8RMREwETEQMQ4zETASDxEQEQ8RDhMPEg8REBEPEg8REBEQEBEOEhEQDhIQERAREQwVDxEPEg8REBEPEg8REBEPERARDxIQEBAOEw4TDhIQEREPEg8RYmIAASURMBIPERARDxEQEQ8SDxEQERAOMxEQDhIQMhEPEg8REBEwETARMBIvEg8RMREQDjMOMxAREQ4TDxEwEi8SMBEPEg8REBEPEREQERAxDhIOMxAyEQ8SDxEPEjARDxIPERARDxEQEQ8SEBARDRMRMA4zEgANBQ=='
 
-  - platform: broadlink
-    host: !secret SP3_ip
-    mac: !secret SP3_mac
-    timeout: 15
-    type:  sp3
-    friendly_name: 'Estufa'
+#  - platform: broadlink
+#    host: !secret SP2_ip
+#    mac: !secret SP2_mac
+#    timeout: 15
+#    type:  sp2
+#    friendly_name: 'SP2'
+#  - platform: broadlink
+#    host: !secret SP3_ip
+#    mac: !secret SP3_mac
+#    timeout: 15
+#    type:  sp3
+#    friendly_name: 'Estufa'
   - platform: broadlink
     host: !secret RM2_ip
     mac: !secret RM2_mac
@@ -334,51 +350,56 @@ switch:
         command_on: '================'
         command_off: '================'
 
+smartir:
+
 climate:
-  - platform: generic_thermostat
-    name: Living
-    heater: switch.estufa
-    target_sensor: sensor.living_temperature
-    min_temp: 16
-    max_temp: 24
-    target_temp: 22
-    away_temp: 20
-    cold_tolerance: 0.3
-    hot_tolerance: 0.3
-    precision: 0.1
-    initial_operation_mode: "off"
-    ac_mode: False
-    min_cycle_duration:
-      minutes: 20
+#  - platform: generic_thermostat
+#    name: Living
+#    heater: switch.estufa
+#    target_sensor: sensor.living_temperature
+#    min_temp: 16
+#    max_temp: 24
+#    target_temp: 22
+#    away_temp: 20
+#    cold_tolerance: 0.3
+#    hot_tolerance: 0.3
+#    precision: 0.1
+#    initial_operation_mode: "off"
+#    ac_mode: False
+#    min_cycle_duration:
+#      minutes: 20
 
   - platform: smartir
     name: Samsung
+    unique_id: samsung_ac
     device_code: 1400
-    controller_send_service: !secret IR3_service
+    controller_data: !secret IR3_ip
     temperature_sensor: sensor.cuarto_temperature
 
 cast:
   media_player:
     - host: !secret googlehome_ip
+
 media_extractor:
+
 media_player:
 #  - platform: gstreamer
 
   - platform: smartir
     name: TV Samsung
     device_code: 1400
-    controller_send_service: !secret RM1_service
+    controller_data: !secret RM1_ip
     power_sensor: binary_sensor.living_tvselect
 
   - platform: smartir
     name: TV Philips
     device_code: 1000
-    controller_send_service: !secret RM2_service
+    controller_data: !secret RM2_ip
 
   - platform: smartir
     name: Sony
     device_code: 1500
-    controller_send_service: !secret IR3_service
+    controller_data: !secret IR3_ip
 
 # keyboard:
 # keyboard_remote:
@@ -417,23 +438,23 @@ light:
     lights:
       luz_techo:
         friendly_name: "Luz del techo"
+        turn_on:
+          service: switch.turn_on
+          data:
+            entity_id: switch.bar_lights
+        turn_off:
+          service: switch.turn_off
+          data:
+            entity_id: switch.bar_lights
         value_template: >-
           {% if is_state('switch.bar_lights', 'on') %}
             on
           {% else %}
             off
           {% endif %}
-        turn_on:
-          service: !secret RM1_service
-          data:
-            packet: "sgM0AA4iDiMoCw4AAWYnCygLDiMOIicMKAwOIigLDiIOIg4iDiIoDCgMKAwOIg4jKAsOIg4iDiMAAAAA"
-        turn_off:
-          service: !secret RM1_service
-          data:
-            packet: "sgM0AA4iDiMoCw4AAWYnCygLDiMOIicMKAwOIigLDiIOIg4iDiIoDCgMKAwOIg4jKAsOIg4iDiMAAAAA"
         set_level:
-          service: !secret RM1_service
+          service: broadlink.send
           data_template:
+            host: !secret RM1_ip
             packet: '{{ "shs0AA0iDSIjCyQLIwsNIg0iJAsNIg0iDSIjDAwiDSINAAFfIwsjCw0iDSIkCyMLDSIjCw0iDSIAAAAA" if state_attr("light.luz_techo", "brightness")|int < brightness|int else "shs0AA0iIwsjCyMLDSINIiMLDSINIg0iDSIkCw0iDQABXiQLIwsNIg0iIwskCw0iJAsNIg0iDCIAAAAA" }}'
-
 

@@ -18,7 +18,7 @@
   sequence:
   - data_template:
       entity_id: media_player.lfs50g_4847
-      media_content_id: "{{ states('input_select.which_youtube') }}"
+      media_content_id: '{{ states(''input_select.which_youtube'') }}'
       media_content_type: music
     service: media_extractor.play_media
   - delay: '2'
@@ -52,10 +52,19 @@
     service: media_player.select_source
   - delay: '1'
   - data:
-      packet: "sgM0AA4iDiMoCw4A"
-    service: !secret RM1_service
+      host: !secret RM1_ip
+      packet: sgM0AA4iDiMoCw4A
+    service: broadlink.send
   - delay: '1'
   - data:
-      packet: "sgM0AA4iDiMoCw4A"
-    service: !secret RM1_service
+      host: !secret RM1_ip
+      packet: sgM0AA4iDiMoCw4A
+    service: broadlink.send
+'1554352734335':
+  alias: Omitir intro
+  sequence:
+  - data:
+      host: !secret RM1_ip
+      packet: JgBGAJSUETgROBE4ERERERERERERERE4ETgROBEREREREREREREROBE4ERERERE4ETgROBE4ERERERE4ETgREREREREREREABgcNBQ==
+    service: broadlink.send
 
