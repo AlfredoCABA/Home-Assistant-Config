@@ -190,7 +190,7 @@ input_select:
     name: ¿Qué escuchamos?
     options:
       #Gigi D'Agostino - I'll Fly with You (Adryx-G Bounce Remake)
-      - https://www.youtube.com/watch?v=fzB3BzoZw8M
+      - https://soundcloud.com/adryxg-remixes/gigi-dagostino-ill-fly-with-you-adryx-g-bounce-remake
       # Alan Walker - The Spectre (LUM!X Remix)
       - https://soundcloud.com/lumix_music/alan-walker-the-spectre-lumx-remix
       # Sing Me To Sleep DOPEDROP
@@ -198,7 +198,7 @@ input_select:
       # Julia Michaels - Issues (Paul Gannon Bootleg)
       - https://soundcloud.com/draymon-binset/melbourne-bounce-julia
       # Dimitri Vegas, Martin Garrix, Like Mike - Tremor (Sensation 2014 Anthem) (Original Mix)
-      - https://www.youtube.com/watch?v=RERH5MaNS54
+      - https://soundcloud.com/dimitrivegasandlikemike/dimitri-vegas-martin-garrix-like-mike-tremor
       # Lilly Wood & The Prick and Robin Schulz - Prayer In C (Alex D Bootleg)
       - https://soundcloud.com/alex-d-official-1/prayer-in-c-alex-d-bootleg
       # Ed Sheeran - Shape Of You (Paul Gannon Bootleg)
@@ -207,7 +207,7 @@ input_select:
       - https://soundcloud.com/dopedropmusic/alan-walker-david-whistle-routine-dopedrop-remix
       # Alan Walker - Faded (Paul Gannon Remix)
       - https://soundcloud.com/callum-vlogs-414891955/alan-walker-faded-paul-gannon
-    icon: mdi:youtube
+    icon: mdi:soundcloud
 
 switch:
   - platform: broadlink
