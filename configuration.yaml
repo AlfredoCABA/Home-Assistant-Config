@@ -51,7 +51,7 @@ weblink:
       icon: mdi:remote
 
 upnp:
-  port_mapping: true
+  port_mapping: false
   sensors: true
   ports:
     8123: hass
@@ -171,6 +171,11 @@ binary_sensor:
     after: '06:10'
     before: sunrise
     before_offset: '+01:00'
+
+  - platform: workday
+    country: AR
+
+
 # Text to speech
 tts:
   - platform: google_translate
