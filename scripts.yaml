@@ -67,4 +67,11 @@
       host: !secret RM1_ip
       packet: JgBGAJSUETgROBE4ERERERERERERERE4ETgROBEREREREREREREROBE4ERERERE4ETgROBE4ERERERE4ETgREREREREREREABgcNBQ==
     service: broadlink.send
-
+'1557606106892':
+  alias: Sing me to sleep
+  sequence:
+  - data:
+      entity_id: input_select.which_youtube
+      option: https://soundcloud.com/dopedropmusic/sing-me-to-sleep-dopedrop-remix-alan-walker
+    service: input_select.select_option
+  - service: script.1550104001040
