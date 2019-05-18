@@ -1,0 +1,19 @@
+- id: '1557963225400'
+  alias: Al amanecer
+  trigger:
+  - at: 06:30:00
+    platform: time
+  condition:
+  - condition: time
+    weekday:
+    - mon
+    - tue
+    - wed
+    - thu
+    - fri
+  - before: sunrise
+    condition: sun
+  action:
+  - data:
+      entity_id: light.luz_techo
+    service: light.turn_on
