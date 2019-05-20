@@ -9,10 +9,10 @@ from homeassistant.components.media_player import (
     MediaPlayerDevice, PLATFORM_SCHEMA)
 from homeassistant.components.media_player.const import (
     SUPPORT_TURN_OFF, SUPPORT_TURN_ON, SUPPORT_PREVIOUS_TRACK,
-    SUPPORT_NEXT_TRACK, SUPPORT_VOLUME_STEP,SUPPORT_VOLUME_MUTE,
-    SUPPORT_SELECT_SOURCE, MEDIA_TYPE_CHANNEL, SUPPORT_PAUSE,
-    SUPPORT_PLAY, SUPPORT_STOP, SUPPORT_SEEK, SUPPORT_SHUFFLE_SET,
-    MEDIA_TYPE_MUSIC, SUPPORT_PLAY_MEDIA)
+    SUPPORT_NEXT_TRACK, SUPPORT_VOLUME_STEP, SUPPORT_VOLUME_SET,
+    SUPPORT_VOLUME_MUTE, SUPPORT_SELECT_SOURCE, MEDIA_TYPE_CHANNEL,
+    SUPPORT_PAUSE, SUPPORT_PLAY, SUPPORT_STOP, SUPPORT_SEEK,
+    SUPPORT_SHUFFLE_SET, MEDIA_TYPE_MUSIC, SUPPORT_PLAY_MEDIA)
 from homeassistant.const import (
     CONF_NAME, STATE_OFF, STATE_ON, STATE_UNKNOWN,
     STATE_PLAYING, STATE_PAUSED, 
@@ -124,7 +124,7 @@ class SmartIRMediaPlayer(MediaPlayerDevice, RestoreEntity):
 
         if ('volumeDown' in self._commands and self._commands['volumeDown'] is not None) \
         or ('volumeUp' in self._commands and self._commands['volumeUp'] is not None):
-            self._support_flags = self._support_flags | SUPPORT_VOLUME_STEP
+            self._support_flags = self._support_flags | SUPPORT_VOLUME_STEP | SUPPORT_VOLUME_SET
 
         if 'mute' in self._commands and self._commands['mute'] is not None:
             self._support_flags = self._support_flags | SUPPORT_VOLUME_MUTE
@@ -285,3 +285,4 @@ class SmartIRMediaPlayer(MediaPlayerDevice, RestoreEntity):
             elif power_state.state == STATE_ON:
                 if self._state == STATE_OFF:
                     self._state = STATE_IDLE
+
