@@ -147,11 +147,11 @@ sensor:
   - platform: season
     type: astronomical
 
-  - platform: github
-    access_token: !secret github_access_token
-    repositories:
-      - path: 'home-assistant/home-assistant'
-      - path: 'smartHomeHub/SmartIR'
+#  - platform: github
+#    access_token: !secret github_access_token
+#    repositories:
+#      - path: 'home-assistant/home-assistant'
+#      - path: 'smartHomeHub/SmartIR'
 
 #  - platform: linux_battery
 #    name: "Mouse"
@@ -461,5 +461,30 @@ light:
           service: broadlink.send
           data_template:
             host: !secret RM1_ip
-            packet: '{{ "shs0AA0iDSIjCyQLIwsNIg0iJAsNIg0iDSIjDAwiDSINAAFfIwsjCw0iDSIkCyMLDSIjCw0iDSIAAAAA" if state_attr("light.luz_techo", "brightness")|int < brightness|int else "shs0AA0iIwsjCyMLDSINIiMLDSINIg0iDSIkCw0iDQABXiQLIwsNIg0iIwskCw0iJAsNIg0iDCIAAAAA" }}'
+            packet: '{% set diffe = (state_attr("light.luz_techo", "brightness")|int * 135 / 255) - (brightness|int * 135 / 255) %}
+            {% set differ = "{}".format( diffe|int|abs ) %}{% set vols = {
+            "0":"sgA", "1":"sgE", "2":"sgI", "3":"sgM", "4":"sgQ", "5":"sgU", "6":"sgY",
+            "7":"sgc", "8":"sgg", "9":"sgk", "10":"sgo", "11":"sgs", "12":"sgw",
+            "13":"sg0", "14":"sg4", "15":"sg8", "16":"shA", "17":"shE", "18":"shI",
+            "19":"shM", "20":"shQ", "21":"shU", "22":"shY", "23":"shc", "24":"shg",
+            "25":"shk", "26":"sho", "27":"shs", "28":"shw", "29":"sh0", "30":"sh4",
+            "31":"sh8", "32":"siA", "33":"siE", "34":"siI", "35":"siM", "36":"siQ",
+            "37":"siU", "38":"siY", "39":"sic", "40":"sig", "41":"sik", "42":"sio",
+            "43":"sis", "44":"siw", "45":"si0", "46":"si4", "47":"si8", "48":"sjA",
+            "49":"sjE", "50":"sjI", "51":"sjM", "52":"sjQ", "53":"sjU", "54":"sjY",
+            "55":"sjc", "56":"sjg", "57":"sjk", "58":"sjo", "59":"sjs", "60":"sjw",
+            "61":"sj0", "62":"sj4", "63":"sj8", "64":"skA", "65":"skE", "66":"skI",
+            "67":"skM", "68":"skQ", "69":"skU", "70":"skY", "71":"skc", "72":"skg",
+            "73":"skk", "74":"sko", "75":"sks", "76":"skw", "77":"sk0", "78":"sk4",
+            "79":"sk8", "80":"slA", "81":"slE", "82":"slI", "83":"slM", "84":"slQ",
+            "85":"slU", "86":"slY", "87":"slc", "88":"slg", "89":"slk", "90":"slo",
+            "91":"sls", "92":"slw", "93":"sl0", "94":"sl4", "95":"sl8", "96":"smA",
+            "97":"smE", "98":"smI", "99":"smM", "100":"smQ", "101":"smU", "102":"smY",
+            "103":"smc", "104":"smg", "105":"smk", "106":"smo", "107":"sms", "108":"smw",
+            "109":"sm0", "110":"sm4", "111":"sm8", "112":"snA", "113":"snE", "114":"snI",
+            "115":"snM", "116":"snQ", "117":"snU", "118":"snY", "119":"snc", "120":"sng",
+            "121":"snk", "122":"sno", "123":"sns", "124":"snw", "125":"sn0", "126":"sn4",
+            "127":"sn8", "128":"soA", "129":"soE", "130":"soI", "131":"soM", "132":"soQ",
+            "133":"soU", "134":"soY", "135":"soc" } %}
+{{ "{}{}".format( vols[differ], "0AA0iDSIjCyQLIwsNIg0iJAsNIg0iDSIjDAwiDSINAAFfIwsjCw0iDSIkCyMLDSIjCw0iDSIAAAAA") if diffe < 0 else "{}{}".format( vols[differ],"0AA0iIwsjCyMLDSINIiMLDSINIg0iDSIkCw0iDQABXiQLIwsNIg0iIwskCw0iJAsNIg0iDCIAAAAA") }}'
 
