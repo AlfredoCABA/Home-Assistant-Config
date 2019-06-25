@@ -91,3 +91,15 @@ sensor.cisco_dpc3828_packetssec_sent:
   hidden: true
 group.all_scripts:
   order: 1
+script.1550195767299:
+  icon: mdi:lightbulb
+script.1550201523999:
+  icon: mdi:power
+script.1550103247453:
+  icon: mdi:music
+script.1557606106892:
+  icon: mdi:music
+script.1554352734335:
+  icon: mdi:import
+script.1550104001040:
+  icon: mdi:music
