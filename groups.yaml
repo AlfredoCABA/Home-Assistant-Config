@@ -71,6 +71,9 @@ sensores:
     - sun.sun
     - sensor.porongo_alarm
     - sensor.porongo_timer
+    - binary_sensor.amanecer
+    - binary_sensor.living_tv
+    - binary_sensor.workday_sensor
 
 esc_living:
   name: Escenas
@@ -82,6 +85,7 @@ esc_living:
     - light.luz_techo
     - script.1554352734335
     - input_select.which_youtube
+    - script.1557606106892
 
 # Vistas
 default_view:
@@ -124,3 +128,4 @@ otros:
     - updater.updater
     - weblink.home_assistant
     - weblink.smartir
+    - automation.al_amanecer
