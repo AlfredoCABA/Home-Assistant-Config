@@ -31,13 +31,15 @@ CONF_UNIQUE_ID = 'unique_id'
 CONF_DEVICE_CODE = 'device_code'
 CONF_CONTROLLER_DATA = "controller_data"
 CONF_POWER_SENSOR = 'power_sensor'
+CONF_SOURCE_NAMES = 'source_names'
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_UNIQUE_ID): cv.string,
     vol.Optional(CONF_NAME, default=DEFAULT_NAME): cv.string,
     vol.Required(CONF_DEVICE_CODE): cv.positive_int,
     vol.Required(CONF_CONTROLLER_DATA): cv.string,
-    vol.Optional(CONF_POWER_SENSOR): cv.entity_id
+    vol.Optional(CONF_POWER_SENSOR): cv.entity_id,
+    vol.Optional(CONF_SOURCE_NAMES): dict
 })
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
@@ -64,9 +66,9 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
             Helper.downloader(codes_source.format(device_code), device_json_path)
         except:
             _LOGGER.error("There was an error while downloading the device Json file. " \
-                          "Please check your internet connection or the device code " \
+                          "Please check your internet connection or if the device code " \
                           "exists on GitHub. If the problem still exists please " \
-                          "place the file manually in the proper location.")
+                          "place the file manually in the proper directory.")
             return
 
     with open(device_json_path) as j:
@@ -131,6 +133,13 @@ class SmartIRMediaPlayer(MediaPlayerDevice, RestoreEntity):
 
         if 'sources' in self._commands and self._commands['sources'] is not None:
             self._support_flags = self._support_flags | SUPPORT_SELECT_SOURCE
+
+            for source, new_name in config.get(CONF_SOURCE_NAMES, {}).items():
+                if source in self._commands['sources']:
+                    if new_name is not None:
+                        self._commands['sources'][new_name] = self._commands['sources'][source]
+
+                    del self._commands['sources'][source]
 
             #Sources list
             for key in self._commands['sources']:
@@ -210,15 +219,19 @@ class SmartIRMediaPlayer(MediaPlayerDevice, RestoreEntity):
 
     async def async_turn_off(self):
         """Turn the media player off."""
-        self._state = STATE_OFF
         await self.send_command(self._commands['off'])
-        await self.async_update_ha_state()
+        
+        if self._power_sensor is None:
+            self._state = STATE_OFF
+            await self.async_update_ha_state()
 
     async def async_turn_on(self):
         """Turn the media player off."""
-        self._state = STATE_IDLE
         await self.send_command(self._commands['on'])
-        await self.async_update_ha_state()
+
+        if self._power_sensor is None:
+            self._state = STATE_IDLE
+            await self.async_update_ha_state()
 
     async def async_media_play(self):
         self._state = STATE_PLAYING
@@ -281,8 +294,7 @@ class SmartIRMediaPlayer(MediaPlayerDevice, RestoreEntity):
 
         if power_state:
             if power_state.state == STATE_OFF:
-                self._state = STATE_OFF
-            elif power_state.state == STATE_ON:
-                if self._state == STATE_OFF:
-                    self._state = STATE_IDLE
-
+                if self._state != STATE_OFF:
+                    self._state = STATE_OFF
+            elif self._state == STATE_OFF:
+                self._state = STATE_IDLE
