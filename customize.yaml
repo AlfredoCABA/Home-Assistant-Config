@@ -29,7 +29,7 @@ sensor.moon:
 sun.sun:
   friendly_name: Sol
 switch.cd_sony_vol:
-  friendly_name: "+ \U0001F50A -"
+  friendly_name: + 🔊 -
   icon: mdi:volume-high
 switch.cd_sony_play:
   friendly_name: ▶ / ▮▮
@@ -38,7 +38,7 @@ switch.cd_sony_usb:
   assumed_state: true
   icon: mdi:usb
 switch.cd_sony_folder:
-  friendly_name: "+ \U0001F4C1 -"
+  friendly_name: + 📁 -
   icon: mdi:folder
 switch.cd_sony:
   friendly_name: On / Off
@@ -50,13 +50,13 @@ switch.cd_sony_next:
   friendly_name: ⏭ / ⏮
   icon: mdi:skip-next
 switch.cd_sony_tuner:
-  friendly_name: "\U0001F4BF  / ⏹"
+  friendly_name: 💿  / ⏹
   icon: mdi:disk
 switch.cd_sony_re:
-  friendly_name: "\U0001F501 / FM Mode - off no se"
+  friendly_name: 🔁 / FM Mode - off no se
   icon: mdi:repeat
 switch.cd_sony_mute:
-  friendly_name: "Clear / \U0001F507"
+  friendly_name: Clear / 🔇
   icon: mdi:volume-mute
 switch.bar_lights_full:
   friendly_name: Brillo a lo que da
@@ -103,3 +103,5 @@ script.1554352734335:
   icon: mdi:import
 script.1550104001040:
   icon: mdi:music
+input_text.base_url:
+  hidden: true

@@ -190,28 +190,36 @@ cloud:
 group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
+
+input_text:
+  base_url:
+    initial: !secret base_url
+  rm1_ip:
+    initial: !secret RM1_ip
+
 input_select:
-  which_youtube:
+  which_melody:
     name: ¿Qué escuchamos?
     options:
-      #Gigi D'Agostino - I'll Fly with You (Adryx-G Bounce Remake)
-      - https://soundcloud.com/adryxg-remixes/gigi-dagostino-ill-fly-with-you-adryx-g-bounce-remake
-      # Alan Walker - The Spectre (LUM!X Remix)
-      - https://soundcloud.com/lumix_music/alan-walker-the-spectre-lumx-remix
-      # Sing Me To Sleep DOPEDROP
-      - https://soundcloud.com/dopedropmusic/sing-me-to-sleep-dopedrop-remix-alan-walker
-      # Julia Michaels - Issues (Paul Gannon Bootleg)
-      - https://soundcloud.com/draymon-binset/melbourne-bounce-julia
-      # Dimitri Vegas, Martin Garrix, Like Mike - Tremor (Sensation 2014 Anthem) (Original Mix)
-      - https://soundcloud.com/dimitrivegasandlikemike/dimitri-vegas-martin-garrix-like-mike-tremor
+      - Gigi D'Agostino - I'll Fly With You (Adryx G Bounce Remake)
+      # https://soundcloud.com/adryxg-remixes/gigi-dagostino-ill-fly-with-you-adryx-g-bounce-remake
+      - Alan Walker - The Spectre (LUM!X Remix)
+      # https://soundcloud.com/lumix_music/alan-walker-the-spectre-lumx-remix
+      - Sing Me To Sleep (DOPEDROP Remix) - Alan Walker
+      # https://soundcloud.com/dopedropmusic/sing-me-to-sleep-dopedrop-remix-alan-walker
+      - Julia Michaels - Issues (Paul Gannon Remix Bootleg)
+      # - https://soundcloud.com/draymon-binset/melbourne-bounce-julia
+      - Dimitri Vegas, Martin Garrix & Like Mike - Tremor
+      # https://soundcloud.com/dimitrivegasandlikemike/dimitri-vegas-martin-garrix-like-mike-tremor
       # Lilly Wood & The Prick and Robin Schulz - Prayer In C (Alex D Bootleg)
-      - https://soundcloud.com/alex-d-official-1/prayer-in-c-alex-d-bootleg
-      # Ed Sheeran - Shape Of You (Paul Gannon Bootleg)
-      - https://soundcloud.com/musicfromaliens/ed-sheeran-shape-of-you-paul-gannon-bootleg
-      # Alan Walker & David Whistle - Routine (DOPEDROP Remix)
-      - https://soundcloud.com/dopedropmusic/alan-walker-david-whistle-routine-dopedrop-remix
-      # Alan Walker - Faded (Paul Gannon Remix)
-      - https://soundcloud.com/callum-vlogs-414891955/alan-walker-faded-paul-gannon
+      - Prayer In C (Alex D Bootleg)
+      # - https://soundcloud.com/alex-d-official-1/prayer-in-c-alex-d-bootleg
+      - Ed Sheeran - Shape Of You (Paul Gannon Bootleg)
+      # https://soundcloud.com/musicfromaliens/ed-sheeran-shape-of-you-paul-gannon-bootleg
+      - Alan Walker & David Whistle - Routine (DOPEDROP Remix)
+      # - https://soundcloud.com/dopedropmusic/alan-walker-david-whistle-routine-dopedrop-remix
+      - Alan Walker - Faded (Paul Gannon Remix)
+      # https://soundcloud.com/callum-vlogs-414891955/alan-walker-faded-paul-gannon
     icon: mdi:soundcloud
 
 switch:
@@ -435,6 +443,8 @@ googlehome:
   devices:
     - host: !secret googlehome_ip
       track_alarms: true
+
+person:
 
 shopping_list:
 

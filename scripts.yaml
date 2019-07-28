@@ -18,12 +18,12 @@
   sequence:
   - data_template:
       entity_id: media_player.lfs50g_4847
-      media_content_id: '{{ states(''input_select.which_youtube'') }}'
-      media_content_type: music
-    service: media_extractor.play_media
+      media_content_id: 'https://{{ states("input_text.base_url") }}/local/audio/{{ states("input_select.which_melody")|replace(" ","%20") }}.mp3'
+      media_content_type: audio/mp3
+    service: media_player.play_media
   - delay: '2'
   - data:
-      entity_id: input_select.which_youtube
+      entity_id: input_select.which_melody
     service: input_select.select_next
 '1550195767299':
   alias: Penumbra
@@ -33,12 +33,13 @@
     service: switch.turn_on
   - delay: '1'
   - data:
-      entity_id: switch.bar_lights_full
-    service: switch.turn_off
+      entity_id: light.luz_techo
+      brightness: 1
+    service: light.turn_on
   - delay: '6'
   - data:
-      entity_id: switch.bar_lights
-    service: switch.turn_off
+      entity_id: light.luz_techo
+    service: light.turn_off
 '1550201523999':
   alias: PC
   sequence:
@@ -51,27 +52,27 @@
       source: HDMI3
     service: media_player.select_source
   - delay: '1'
-  - data:
-      host: !secret RM1_ip
+  - data_template:
+      host: '{{ states("input_text.rm1_ip") }}'
       packet: sgM0AA4iDiMoCw4A
     service: broadlink.send
   - delay: '1'
-  - data:
-      host: !secret RM1_ip
+  - data_template:
+      host: '{{ states("input_text.rm1_ip") }}'
       packet: sgM0AA4iDiMoCw4A
     service: broadlink.send
 '1554352734335':
   alias: Omitir intro
   sequence:
-  - data:
-      host: !secret RM1_ip
+  - data_template:
+      host: '{{ states("input_text.rm1_ip") }}'
       packet: JgBGAJSUETgROBE4ERERERERERERERE4ETgROBEREREREREREREROBE4ERERERE4ETgROBE4ERERERE4ETgREREREREREREABgcNBQ==
     service: broadlink.send
 '1557606106892':
   alias: Sing me to sleep
   sequence:
   - data:
-      entity_id: input_select.which_youtube
-      option: https://soundcloud.com/dopedropmusic/sing-me-to-sleep-dopedrop-remix-alan-walker
+      entity_id: input_select.which_melody
+      option: Sing Me To Sleep (DOPEDROP Remix) - Alan Walker
     service: input_select.select_option
   - service: script.1550104001040

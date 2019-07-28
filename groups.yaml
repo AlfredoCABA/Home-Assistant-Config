@@ -84,7 +84,7 @@ esc_living:
     - script.1550104001040
     - light.luz_techo
     - script.1554352734335
-    - input_select.which_youtube
+    - input_select.which_melody
     - script.1557606106892
 
 # Vistas
@@ -129,3 +129,5 @@ otros:
     - weblink.home_assistant
     - weblink.smartir
     - automation.al_amanecer
+    - group.luz
+
