@@ -7,6 +7,7 @@ luz:
     - switch.bar_lights_full
     - switch.bar_lights_gas
     - switch.bar_lights_step
+    - input_select.which_rf
 
 tv_samsung:
   name: TV Samsung
@@ -86,7 +87,8 @@ esc_living:
     - script.1554352734335
     - input_select.which_melody
     - script.1557606106892
-
+    - input_text.remote_media
+    - script.1566158028435
 # Vistas
 default_view:
   name: Living

@@ -105,3 +105,7 @@ script.1550104001040:
   icon: mdi:music
 input_text.base_url:
   hidden: true
+script.1566158028435:
+  icon: mdi:google-home
+input_text.remote_media:
+  icon: mdi:youtube

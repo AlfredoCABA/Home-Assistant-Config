@@ -18,7 +18,8 @@
   sequence:
   - data_template:
       entity_id: media_player.lfs50g_4847
-      media_content_id: 'https://{{ states("input_text.base_url") }}/local/audio/{{ states("input_select.which_melody")|replace(" ","%20") }}.mp3'
+      media_content_id: https://{{ states("input_text.base_url") }}/local/audio/{{
+        states("input_select.which_melody")|replace(" ","%20") }}.mp3
       media_content_type: audio/mp3
     service: media_player.play_media
   - delay: '2'
@@ -76,3 +77,11 @@
       option: Sing Me To Sleep (DOPEDROP Remix) - Alan Walker
     service: input_select.select_option
   - service: script.1550104001040
+'1566158028435':
+  alias: Cast al Porongo
+  sequence:
+  - data_template:
+      entity_id: media_player.lfs50g_4847
+      media_content_id: '{{ states("input_text.remote_media") }}'
+      media_content_type: music
+    service: media_extractor.play_media

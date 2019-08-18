@@ -196,31 +196,35 @@ input_text:
     initial: !secret base_url
   rm1_ip:
     initial: !secret RM1_ip
+  rm2_ip:
+    initial: !secret RM2_ip
+  remote_media:
+    name: YouTube
+    pattern: '[:a-fA-F0-9/?=\.]*'
+    max: 255
 
 input_select:
+  which_rf:
+    name: ¿Qué RM2 uso para RF?
+    icon: mdi:radio-tower
+    options:
+      - Living
+      - Cuarto
   which_melody:
     name: ¿Qué escuchamos?
+    icon: mdi:soundcloud
     options:
+      - Clean Bandit - Rockabye Ft. Sean Paul & Anne - Marie ( Dj.IsI Rework )
       - Gigi D'Agostino - I'll Fly With You (Adryx G Bounce Remake)
-      # https://soundcloud.com/adryxg-remixes/gigi-dagostino-ill-fly-with-you-adryx-g-bounce-remake
       - Alan Walker - The Spectre (LUM!X Remix)
-      # https://soundcloud.com/lumix_music/alan-walker-the-spectre-lumx-remix
       - Sing Me To Sleep (DOPEDROP Remix) - Alan Walker
-      # https://soundcloud.com/dopedropmusic/sing-me-to-sleep-dopedrop-remix-alan-walker
       - Julia Michaels - Issues (Paul Gannon Remix Bootleg)
-      # - https://soundcloud.com/draymon-binset/melbourne-bounce-julia
       - Dimitri Vegas, Martin Garrix & Like Mike - Tremor
-      # https://soundcloud.com/dimitrivegasandlikemike/dimitri-vegas-martin-garrix-like-mike-tremor
       # Lilly Wood & The Prick and Robin Schulz - Prayer In C (Alex D Bootleg)
       - Prayer In C (Alex D Bootleg)
-      # - https://soundcloud.com/alex-d-official-1/prayer-in-c-alex-d-bootleg
       - Ed Sheeran - Shape Of You (Paul Gannon Bootleg)
-      # https://soundcloud.com/musicfromaliens/ed-sheeran-shape-of-you-paul-gannon-bootleg
       - Alan Walker & David Whistle - Routine (DOPEDROP Remix)
-      # - https://soundcloud.com/dopedropmusic/alan-walker-david-whistle-routine-dopedrop-remix
       - Alan Walker - Faded (Paul Gannon Remix)
-      # https://soundcloud.com/callum-vlogs-414891955/alan-walker-faded-paul-gannon
-    icon: mdi:soundcloud
 
 switch:
   - platform: broadlink
@@ -402,7 +406,7 @@ media_player:
     name: TV Samsung
     device_code: 1400
     controller_data: !secret RM1_ip
-    power_sensor: binary_sensor.living_tvselect
+#    power_sensor: binary_sensor.living_tvselect
 
   - platform: smartir
     name: TV Philips
@@ -429,15 +433,15 @@ google_assistant:
     - media_player
     - script
   entity_config:
+     switch.wakeup_the_broadlink:
+       expose: false
+     switch.wakeup_the_broadlink2:
+       expose: false
 #     switch.bar_lights:
 #       name: Luz del techo
 #       aliases:
 #         - Luz del living
 #         - La luz
-     switch.wakeup_the_broadlink:
-       expose: false
-     switch.wakeup_the_broadlink2:
-       expose: false
 
 googlehome:
   devices:
