@@ -1,15 +1,4 @@
 homeassistant:
-  # Name of the location where Home Assistant is running
-  name: Depto
-  # Location required to calculate the time the sun rises and sets
-  latitude: !secret latitude
-  longitude: !secret longitude
-  # Impacts weather/sunrise data (altitude above sea level in meters)
-  elevation: !secret elevation
-  # metric for Metric, imperial for Imperial
-  unit_system: metric
-  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-  time_zone: !secret time_zone
   # Customization file
   customize: !include customize.yaml
   auth_providers:
@@ -80,18 +69,40 @@ history:
     domains:
       - weblink
       - updater
+      - automation
+      - group
     entities:
-      - group.cuarto
-      - group.default_view
-      - group.all_switches
-      - group.all_scripts
-      - group.all_devices
-      - group.dormitorio
-      - group.living
-      - group.all_lights
+      - input_text.rm1_ip
+      - input_text.rm2_ip
+      - sensor.date
+      - sensor.time
+      - switch.wakeup_the_broadlink
+      - switch.wakeup_the_broadlink2
+      - switch.cd_sony
+      - switch.cd_sony_play
+      - switch.cd_sony_vol
+      - switch.cd_sony_ff
+      - switch.cd_sony_next
+      - switch.cd_sony_folder
+      - switch.cd_sony_tuner
+      - switch.cd_sony_usb
+      - switch.cd_sony_re
+      - switch.cd_sony_mute
+      - switch.aa_samsung_frio_26_silencioso
+      - switch.aa_samsung_frio_25_fast_nobeep
+      - switch.aa_samsung_frio_25_silencioso
+      - switch.aa_samsung_frio_24_fast
+      - switch.aa_samsung_frio_24_normal
+      - switch.aa_samsung_frio_24_vaiven
 
 # View all events in a logbook
 logbook:
+  exclude:
+    entities:
+      - sensor.date
+    domains:
+      - group
+      - weblink
 
 # Enables a map showing the location of tracked devices
 map:
@@ -146,6 +157,29 @@ sensor:
 
   - platform: season
     type: astronomical
+
+  - platform: time_date
+    display_options:
+      - 'time'
+      - 'date'
+
+  - platform: history_stats
+    name: Luz encendida ayer
+    entity_id: light.luz_techo
+    state: 'on'
+    type: time
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      hours: 24
+
+  - platform: history_stats
+    name: TV encendido ayer
+    entity_id: binary_sensor.living_tv
+    state: 'on'
+    type: time
+    end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
+    duration:
+      hours: 24
 
 #  - platform: github
 #    access_token: !secret github_access_token
@@ -433,15 +467,15 @@ google_assistant:
     - media_player
     - script
   entity_config:
-     switch.wakeup_the_broadlink:
-       expose: false
-     switch.wakeup_the_broadlink2:
-       expose: false
-#     switch.bar_lights:
-#       name: Luz del techo
-#       aliases:
-#         - Luz del living
-#         - La luz
+#     switch.wakeup_the_broadlink:
+#       expose: false
+#     switch.wakeup_the_broadlink2:
+#       expose: false
+     light.luz_techo:
+       name: Luz del techo
+       aliases:
+         - Luz del living
+         - La luz
 
 googlehome:
   devices:
