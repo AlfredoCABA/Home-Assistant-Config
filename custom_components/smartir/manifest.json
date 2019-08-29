@@ -5,10 +5,10 @@
   "dependencies": [],
   "codeowners": ["@smartHomeHub"],
   "requirements": [],
-  "homeassistant": "0.96.0b1",
+  "homeassistant": "0.96.0",
   "updater": {
-    "version": "1.7.0",
-    "releaseNotes": "-- Add config option to override source names in media_player platform<br> -- Add support for Simbio AC unit<br> -- Add support for Mitsubishi MSZ-AP50VGKD unit",
+    "version": "1.7.3",
+    "releaseNotes": "-- Added support for new AC models<br> -- Added support for device_class property on media_player devices",
     "files": [
       "__init__.py",
       "climate.py",
