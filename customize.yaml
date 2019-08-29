@@ -109,3 +109,7 @@ script.1566158028435:
   icon: mdi:google-home
 input_text.remote_media:
   icon: mdi:youtube
+input_text.rm1_ip:
+  hidden: true
+input_text.rm2_ip:
+  hidden: true
