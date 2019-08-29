@@ -30,15 +30,6 @@ http:
   ssl_certificate: !secret ssl_certificate
   ssl_key: !secret ssl_key
 
-weblink:
-  entities:
-    - name: Home Assistant
-      url: https://www.home-assistant.io
-      icon: mdi:home-assistant
-    - name: SmartIR
-      url: https://github.com/smartHomeHub/SmartIR
-      icon: mdi:remote
-
 upnp:
   port_mapping: false
   sensors: true
@@ -67,7 +58,6 @@ conversation:
 history:
   exclude:
     domains:
-      - weblink
       - updater
       - automation
       - group
@@ -102,7 +92,6 @@ logbook:
       - sensor.date
     domains:
       - group
-      - weblink
 
 # Enables a map showing the location of tracked devices
 map:
