@@ -466,11 +466,6 @@ google_assistant:
          - Luz del living
          - La luz
 
-googlehome:
-  devices:
-    - host: !secret googlehome_ip
-      track_alarms: true
-
 person:
 
 shopping_list:
