@@ -369,6 +369,12 @@ switch:
 #    timeout: 15
 #    type:  sp2
 #    friendly_name: 'SP2'
+  - platform: broadlink
+    host: !secret SPmini_ip
+    mac: !secret SPmini_mac
+    timeout: 15
+    type:  spmini2
+    friendly_name: 'Estufa'
 #  - platform: broadlink
 #    host: !secret SP3_ip
 #    mac: !secret SP3_mac
@@ -393,21 +399,21 @@ switch:
 smartir:
 
 climate:
-#  - platform: generic_thermostat
-#    name: Living
-#    heater: switch.estufa
-#    target_sensor: sensor.living_temperature
-#    min_temp: 16
-#    max_temp: 24
-#    target_temp: 22
-#    away_temp: 20
-#    cold_tolerance: 0.3
-#    hot_tolerance: 0.3
-#    precision: 0.1
-#    initial_operation_mode: "off"
-#    ac_mode: False
-#    min_cycle_duration:
-#      minutes: 20
+  - platform: generic_thermostat
+    name: Living
+    heater: switch.estufa
+    ac_mode: false
+    target_sensor: sensor.living_temperature
+    min_temp: 16
+    max_temp: 24
+    target_temp: 22
+    away_temp: 20
+    cold_tolerance: 0.3
+    hot_tolerance: 0.3
+    precision: 0.1
+    initial_hvac_mode: "off"
+    min_cycle_duration:
+      minutes: 20
 
   - platform: smartir
     name: Samsung
