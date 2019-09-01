@@ -106,16 +106,8 @@ sensor:
     scan_interval: 3600
     monitored_conditions:
       - temperature
-#        friendly_name: "Exterior"
-#        device_class: temperature
-#        unit_of_measurement: '°C'
       - humidity
-#        friendly_name: "Humedad exterior"
-#        device_class: humidity
-#        unit_of_measurement: '%'
       - pressure
-#        friendly_name: "Presión atmosférica"
-#        unit_of_measurement: hPa
 
   - platform: moon
 
