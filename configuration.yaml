@@ -398,12 +398,12 @@ climate:
     target_sensor: sensor.living_temperature
     min_temp: 16
     max_temp: 24
-    target_temp: 22
-    away_temp: 20
-    cold_tolerance: 0.3
+#    target_temp: 22
+    away_temp: 19
+    cold_tolerance: 0.2
     hot_tolerance: 0.3
     precision: 0.1
-    initial_hvac_mode: "off"
+#    initial_hvac_mode: "off"
     min_cycle_duration:
       minutes: 20
 
