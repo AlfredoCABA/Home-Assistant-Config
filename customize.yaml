@@ -92,7 +92,7 @@ sensor.cisco_dpc3828_packetssec_sent:
 group.all_scripts:
   order: 1
 script.1550195767299:
-  icon: mdi:lightbulb
+  icon: mdi:lightbulb-off
 script.1550201523999:
   icon: mdi:power
 script.1550103247453:
