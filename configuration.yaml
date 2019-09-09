@@ -162,6 +162,11 @@ sensor:
     duration:
       hours: 24
 
+  - platform: cert_expiry
+    name: Vence certificado
+    host: 127.0.0.1
+    port: 8123
+
 #  - platform: github
 #    access_token: !secret github_access_token
 #    repositories:
@@ -189,7 +194,6 @@ binary_sensor:
 
   - platform: workday
     country: AR
-
 
 # Text to speech
 tts:
@@ -490,7 +494,12 @@ light:
         set_level:
           service: broadlink.send
           data_template:
-            host: !secret RM1_ip
+            host: >-
+              {% if is_state('input_select.which_rf', 'Living') %}
+                {{ states("input_text.rm1_ip") }}
+              {% else %}
+                {{ states("input_text.rm2_ip") }}
+              {% endif %}
             packet: '{% set diffe = (state_attr("light.luz_techo", "brightness")|int * 135 / 255) - (brightness|int * 135 / 255) %}
             {% set differ = "{}".format( diffe|int|abs ) %}{% set vols = {
             "0":"sgA", "1":"sgE", "2":"sgI", "3":"sgM", "4":"sgQ", "5":"sgU", "6":"sgY",
