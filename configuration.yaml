@@ -90,6 +90,7 @@ logbook:
   exclude:
     entities:
       - sensor.date
+      - sensor.time
     domains:
       - group
 
@@ -161,11 +162,6 @@ sensor:
     end: '{{ now().replace(hour=0).replace(minute=0).replace(second=0) }}'
     duration:
       hours: 24
-
-  - platform: cert_expiry
-    name: Vence certificado
-    host: 127.0.0.1
-    port: 8123
 
 #  - platform: github
 #    access_token: !secret github_access_token
