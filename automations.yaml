@@ -17,3 +17,14 @@
   - data:
       entity_id: light.luz_techo
     service: light.turn_on
+- id: '1569215281534'
+  alias: Al reiniciar
+  trigger:
+  - event: start
+    platform: homeassistant
+  condition: []
+  action:
+  - delay: 00:01:30
+  - data:
+      entity_id: sensor.vence_certificado
+    service: homeassistant.update_entity
