@@ -109,6 +109,8 @@ sensor:
       - temperature
       - humidity
       - pressure
+      - symbol
+      - cloudiness
 
   - platform: moon
 
@@ -229,6 +231,7 @@ input_select:
     name: ¿Qué escuchamos?
     icon: mdi:soundcloud
     options:
+      - Edward Maya ft Vika Jigulina - Stereo Love (Cihan Can Remix)
       - Clean Bandit - Rockabye Ft. Sean Paul & Anne - Marie ( Dj.IsI Rework )
       - Gigi D'Agostino - I'll Fly With You (Adryx G Bounce Remake)
       - Alan Walker - The Spectre (LUM!X Remix)
@@ -240,6 +243,12 @@ input_select:
       - Ed Sheeran - Shape Of You (Paul Gannon Bootleg)
       - Alan Walker & David Whistle - Routine (DOPEDROP Remix)
       - Alan Walker - Faded (Paul Gannon Remix)
+      - Charly García - No voy en tren
+      - Billie Eilish - Bad Guy (Tiësto Remix)
+      - Antonio Vivaldi - The Four Seasons - Winter I
+      - Billie Eilish - Bad Guy (Sasha Vector Remix)
+      - Julia Michaels - Issues (Alan Walker Remix)
+      - Alan Walker - Alone (DOPEDROP Edit)
 
 switch:
   - platform: broadlink

@@ -113,3 +113,9 @@ input_text.rm1_ip:
   hidden: true
 input_text.rm2_ip:
   hidden: true
+sensor.clima_cloudiness:
+  friendly_name: Nubosidad
+sensor.clima_symbol:
+  friendly_name: Clima
+sensor.season:
+  friendly_name: Estación
