@@ -30,6 +30,9 @@ http:
   ssl_certificate: !secret ssl_certificate
   ssl_key: !secret ssl_key
 
+logger:
+  default: warn
+
 upnp:
   port_mapping: false
   sensors: true
@@ -46,11 +49,10 @@ upnp:
 updater:
   # Optional, allows Home Assistant developers to focus on popular components.
   # include_used_components: true
-
+# make Home Assistant discoverable for other services
+zeroconf:
 # Discover some devices automatically
 discovery:
-  ignore:
-    - samsung_tv
 # Allows you to issue voice commands from the frontend in enabled browsers
 conversation:
 
@@ -203,10 +205,11 @@ tts:
 
 # Cloud
 cloud:
-
+mobile_app:
 group: !include groups.yaml
 automation: !include automations.yaml
 script: !include scripts.yaml
+zone: !include zones.yaml
 
 input_text:
   base_url:
@@ -230,25 +233,24 @@ input_select:
   which_melody:
     name: ¿Qué escuchamos?
     icon: mdi:soundcloud
-    options:
-      - Edward Maya ft Vika Jigulina - Stereo Love (Cihan Can Remix)
-      - Clean Bandit - Rockabye Ft. Sean Paul & Anne - Marie ( Dj.IsI Rework )
-      - Gigi D'Agostino - I'll Fly With You (Adryx G Bounce Remake)
-      - Alan Walker - The Spectre (LUM!X Remix)
-      - Sing Me To Sleep (DOPEDROP Remix) - Alan Walker
-      - Julia Michaels - Issues (Paul Gannon Remix Bootleg)
-      - Dimitri Vegas, Martin Garrix & Like Mike - Tremor
-      # Lilly Wood & The Prick and Robin Schulz - Prayer In C (Alex D Bootleg)
-      - Prayer In C (Alex D Bootleg)
-      - Ed Sheeran - Shape Of You (Paul Gannon Bootleg)
-      - Alan Walker & David Whistle - Routine (DOPEDROP Remix)
-      - Alan Walker - Faded (Paul Gannon Remix)
-      - Charly García - No voy en tren
-      - Billie Eilish - Bad Guy (Tiësto Remix)
-      - Antonio Vivaldi - The Four Seasons - Winter I
-      - Billie Eilish - Bad Guy (Sasha Vector Remix)
-      - Julia Michaels - Issues (Alan Walker Remix)
-      - Alan Walker - Alone (DOPEDROP Edit)
+    options: !include melody.yaml
+
+remote:
+  - platform: broadlink
+    host: !secret RM1_ip
+    mac: !secret RM1_mac
+    timeout: 15
+    name: 'Infrarrojo Living'
+  - platform: broadlink
+    host: !secret RM2_ip
+    mac: !secret RM2_mac
+    timeout: 15
+    name: 'RF/IR Cuarto'
+  - platform: broadlink
+    host: !secret IR3_ip
+    mac: !secret IR3_mac
+    timeout: 15
+    name: 'Infrarrojo Dormitorio'
 
 switch:
   - platform: broadlink
@@ -455,7 +457,8 @@ media_player:
 
 google_assistant:
   project_id: !secret project_id
-  api_key: !secret api_key
+  service_account: !include SERVICE_ACCOUNT.JSON
+  report_state: true
   expose_by_default: true
   exposed_domains:
     - climate
@@ -472,10 +475,19 @@ google_assistant:
        aliases:
          - Luz del living
          - La luz
+       room: Living
+     climate.samsung:
+       aliases:
+         - Aire acondicionado
+       room: Dormitorio principal
 
 person:
 
 shopping_list:
+
+sonoff:
+  username: !secret sonoffuser
+  password: !secret sonoffpass
 
 light:
   - platform: template
