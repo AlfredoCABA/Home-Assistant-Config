@@ -1,7 +1,6 @@
 # Grupos
 luz:
   name: Luz
-  control: hidden
   entities:
     - switch.bar_lights
     - switch.bar_lights_full
@@ -11,7 +10,6 @@ luz:
 
 tv_samsung:
   name: TV Samsung
-  control: hidden
   entities:
     - switch.tv_samsung
     - switch.tv_samsung_input
@@ -19,7 +17,6 @@ tv_samsung:
 
 sony:
   name: Minicomponente Sony
-  control: hidden
   entities:
     - switch.cd_sony
     - switch.cd_sony_ff
@@ -34,7 +31,6 @@ sony:
 
 aa_samsung:
   name: Aire acondicionado
-  control: hidden
   entities:
     - switch.aa_samsung_frio_26_silencioso
     - switch.aa_samsung_frio_25_fast_nobeep
@@ -45,13 +41,11 @@ aa_samsung:
 
 tv_philips:
   name: TV Philips
-  control: hidden
   entities:
     - switch.tv_phillips
 
 modem:
   name: Cisco DPC3828
-  control: hidden
   entities:
     - sensor.cisco_dpc3828_bytes_received
     - sensor.cisco_dpc3828_bytes_sent
@@ -60,7 +54,6 @@ modem:
 
 sensores:
   name: Sensores
-  control: hidden
   entities:
     - sensor.clima_humidity
     - sensor.clima_pressure
@@ -78,7 +71,6 @@ sensores:
 
 esc_living:
   name: Escenas
-  control: hidden
   entities:
     - script.1550195767299
     - script.1550201523999
@@ -92,7 +84,6 @@ esc_living:
 # Vistas
 default_view:
   name: Living
-  view: yes
   icon: mdi:sofa
   entities:
     - sensor.clima_temperature
@@ -104,7 +95,6 @@ default_view:
 
 dormitorio:
   name: Dormitorio
-  view: yes
   icon: mdi:bed-empty
   entities:
     - script.1550103247453
@@ -113,7 +103,6 @@ dormitorio:
 
 cuarto:
   name: Cuarto
-  view: yes
   icon: mdi:fish
   entities:
     - sensor.clima_temperature
@@ -122,7 +111,6 @@ cuarto:
 
 otros:
   name: Casa
-  view: yes
   icon: mdi:home
   entities:
     - group.modem
