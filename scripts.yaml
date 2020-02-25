@@ -65,10 +65,11 @@
 '1554352734335':
   alias: Omitir intro
   sequence:
-  - data_template:
-      host: '{{ states("input_text.rm1_ip") }}'
-      packet: JgBGAJSUETgROBE4ERERERERERERERE4ETgROBEREREREREREREROBE4ERERERE4ETgROBE4ERERERE4ETgREREREREREREABgcNBQ==
-    service: broadlink.send
+  - data:
+      command: enter
+      device: television
+    entity_id: remote.infrarrojo_living
+    service: remote.send_command
 '1557606106892':
   alias: Sing me to sleep
   sequence:
@@ -85,3 +86,30 @@
       media_content_id: '{{ states("input_text.remote_media") }}'
       media_content_type: music
     service: media_extractor.play_media
+'1576890664281':
+  alias: Stereo love
+  sequence:
+  - data:
+      option: Edward Maya ft Vika Jigulina - Stereo Love (Cihan Can Remix)
+    entity_id: input_select.which_melody
+    service: input_select.select_option
+  - service: script.1550104001040
+'1576960002038':
+  alias: Aprendizaje de infrarrojo
+  sequence:
+  - data:
+      command:
+      - on/off
+      - bright up
+      - bright down
+      device: luzrf
+    entity_id: remote.rf_ir_cuarto
+    service: remote.learn_command
+'1580603648617':
+  alias: RF cuarto luz on
+  sequence:
+  - data:
+      command: on/off
+      device: luzrf
+    entity_id: remote.rf_ir_cuarto
+    service: remote.send_command
