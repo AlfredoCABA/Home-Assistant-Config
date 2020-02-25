@@ -28,3 +28,20 @@
   - data:
       entity_id: sensor.vence_certificado
     service: homeassistant.update_entity
+- id: '1582338510555'
+  alias: Dejar de cargar
+  description: Apaga la estufa si el celular ya está cargado
+  trigger:
+  - above: 81
+    device_id: c2cc30d4956d4270bf7827e41af98c99
+    domain: sensor
+    entity_id: sensor.battery_level
+    platform: device
+    type: battery_level
+  condition:
+  - condition: state
+    entity_id: switch.estufa
+    state: 'on'
+  action:
+  - entity_id: switch.estufa
+    service: switch.turn_off
