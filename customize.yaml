@@ -119,3 +119,11 @@ sensor.clima_symbol:
   friendly_name: Clima
 sensor.season:
   friendly_name: Estación
+script.1576890664281:
+  icon: mdi:music
+device_tracker.sm_a705mn:
+  icon: mdi:cellphone-android
+device_tracker.sm_j600g:
+  icon: mdi:cellphone-android
+media_player.lfs50g_4847:
+  manufacturer: Sony Corporation
